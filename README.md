@@ -75,6 +75,31 @@ npm run dev -- --host 127.0.0.1 --port 5173
 ```
 Open `http://127.0.0.1:5173` or `http://127.0.0.1:5174` in your browser.
 
+## ☁️ Turso Database & Vercel Deployment
+
+This project supports **[Turso](https://turso.tech)** (distributed libSQL / SQLite over HTTP), making it fully persistent across Vercel Serverless Functions.
+
+### 1. Create a Turso Database
+Install the Turso CLI or create one via the [Turso Dashboard](https://turso.tech):
+```bash
+# Login & create database
+turso auth login
+turso db create yummy-express
+
+# Retrieve database URL and authentication token
+turso db show --url yummy-express
+turso db tokens create yummy-express
+```
+
+### 2. Configure Vercel Deployment
+In your **Vercel Project Settings > Environment Variables**, add:
+- `TURSO_DATABASE_URL`: `libsql://yummy-express-[username].turso.io`
+- `TURSO_AUTH_TOKEN`: `<your-turso-auth-token>`
+
+When deployed on Vercel, the backend will automatically connect to your Turso cloud database, initialize the tables, and seed the menu items on first run.
+
+If these environment variables are omitted locally, the app will automatically fall back to local SQLite (`yummy_express.db`).
+
 ---
 
 ## 🧪 Automated Testing
@@ -86,3 +111,4 @@ Or run the HTTP live server test suite:
 ```bash
 ./backend/venv/bin/python3 tests/test_system.py
 ```
+
