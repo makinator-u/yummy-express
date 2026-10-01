@@ -14,7 +14,7 @@ from ..schemas import (
     DashboardStatsOut
 )
 
-router = APIRouter(prefix="/api/dashboard", tags=["Dashboard"])
+router = APIRouter(tags=["Dashboard"])
 
 @router.get("/stats", response_model=DashboardStatsOut)
 def get_dashboard_stats(db: Session = Depends(get_db)):

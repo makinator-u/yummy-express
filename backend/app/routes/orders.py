@@ -8,7 +8,7 @@ from ..database import get_db
 from ..models import Order, OrderItem, MenuItem
 from ..schemas import OrderCreate, OrderOut
 
-router = APIRouter(prefix="/api/orders", tags=["Orders"])
+router = APIRouter(tags=["Orders"])
 
 def generate_order_number(db: Session) -> str:
     # Try up to 5 times to generate an absolutely collision-free order number

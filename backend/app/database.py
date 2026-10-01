@@ -32,7 +32,25 @@ def init_db():
         except Exception as e:
             print("Auto migration note:", e)
 
+def ensure_db_ready():
+    init_db()
+    from .seed_data import seed_database
+    db = SessionLocal()
+    try:
+        seed_database(db)
+    except Exception as e:
+        print("Seed database note:", e)
+    finally:
+        db.close()
+
+# Initialize immediately on module load
+try:
+    ensure_db_ready()
+except Exception as e:
+    print("Initial DB ready note:", e)
+
 def get_db():
+    ensure_db_ready()
     db = SessionLocal()
     try:
         yield db

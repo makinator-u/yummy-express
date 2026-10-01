@@ -6,7 +6,7 @@ from ..database import get_db
 from ..models import Category, MenuItem
 from ..schemas import CategoryOut, MenuItemOut
 
-router = APIRouter(prefix="/api/menu", tags=["Menu"])
+router = APIRouter(tags=["Menu"])
 
 @router.get("/categories", response_model=List[CategoryOut])
 def get_categories_with_items(db: Session = Depends(get_db)):
