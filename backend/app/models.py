@@ -51,10 +51,24 @@ class MenuItem(Base):
     category = relationship("Category", back_populates="items")
     order_items = relationship("OrderItem", back_populates="menu_item")
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    google_id = Column(String(100), unique=True, index=True, nullable=False)
+    email = Column(String(150), unique=True, index=True, nullable=False)
+    name = Column(String(150), nullable=False)
+    picture = Column(String(500), default="")
+    role = Column(String(50), default="customer")  # customer, admin
+    created_at = Column(DateTime(timezone=True), default=utc_now, server_default=func.now())
+
+    orders = relationship("Order", back_populates="user")
+
 class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     order_number = Column(String(50), unique=True, index=True, nullable=False)
     customer_name = Column(String(100), nullable=False)
     customer_phone = Column(String(20), nullable=False)
@@ -68,6 +82,7 @@ class Order(Base):
     status = Column(String(50), default="Confirmed", index=True)  # Confirmed, Preparing in Wok, Out for Delivery, Delivered, Cancelled
     created_at = Column(DateTime(timezone=True), default=utc_now, server_default=func.now())
 
+    user = relationship("User", back_populates="orders")
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
 
 class OrderItem(Base):

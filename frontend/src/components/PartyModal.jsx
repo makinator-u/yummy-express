@@ -72,34 +72,34 @@ export default function PartyModal({ isOpen, onClose }) {
   return (
     <div className="modal-overlay">
       <div 
-        className="relative w-full max-w-lg bg-zinc-950 border-2 border-amber-500/50 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-lg bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-zinc-800 bg-gradient-to-r from-amber-950/60 via-zinc-900 to-red-950/60 flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-gray-200 bg-amber-50 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300">
+            <div className="p-2 rounded-xl bg-amber-100 text-amber-500">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-black text-amber-300 font-heading">
+              <h3 className="text-base sm:text-lg font-black text-amber-600 font-heading">
                 Party &amp; Bulk Catering
               </h3>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-gray-500">
                 Live Wok Counters &amp; Custom Menus
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-white rounded-lg transition"
+            className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Notice from Menu Flyer */}
-        <div className="p-3 bg-amber-950/40 border-b border-amber-500/30 text-xs text-amber-200 flex items-center gap-2">
+        <div className="p-3 bg-amber-50 border-b border-amber-200 text-xs text-amber-800 flex items-center gap-2">
           <span>🔥</span>
           <span>
             <strong>Menu Special:</strong> We take orders for any kind of party &amp; <em className="text-amber-400 underline">non-veg parties only at your place</em>!
@@ -112,10 +112,10 @@ export default function PartyModal({ isOpen, onClose }) {
               <div className="w-16 h-16 rounded-full bg-green-500/10 border-2 border-green-500/40 text-green-400 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-9 h-9" />
               </div>
-              <h4 className="text-lg font-bold text-white font-heading">
+              <h4 className="text-lg font-bold text-gray-900 font-heading">
                 Party Inquiry Received!
               </h4>
-              <p className="text-xs text-zinc-300 max-w-sm mx-auto leading-relaxed">
+              <p className="text-xs text-gray-600 max-w-sm mx-auto leading-relaxed">
                 Thank you, <strong>{formData.customer_name}</strong>. Chef team from Yummy Express will contact you shortly on <strong>{formData.customer_phone}</strong> to customize your menu.
               </p>
 
@@ -138,23 +138,23 @@ export default function PartyModal({ isOpen, onClose }) {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3.5">
               {error && (
-                <div className="p-3 rounded-xl bg-red-950/50 border border-red-500/40 text-red-300 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
                   <span>{error}</span>
                 </div>
               )}
 
               {/* Party Type Selection */}
               <div>
-                <label className="text-xs font-semibold text-zinc-300 block mb-1.5">Party Type *</label>
+                <label className="text-xs font-semibold text-gray-600 block mb-1.5">Party Type *</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, party_type: 'Veg Catering (Live Wok / Bulk)' })}
                     className={`p-2.5 rounded-xl text-xs font-bold border transition text-left ${
                       formData.party_type.startsWith('Veg')
-                        ? 'bg-amber-500/20 border-amber-400 text-amber-300'
-                        : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                        ? 'bg-amber-100 border-amber-400 text-amber-700'
+                        : 'bg-gray-50 border-gray-200 text-gray-600'
                     }`}
                   >
                     🥬 Veg Live Wok Catering
@@ -165,8 +165,8 @@ export default function PartyModal({ isOpen, onClose }) {
                     onClick={() => setFormData({ ...formData, party_type: 'Non-Veg Party (At Your Place Only)' })}
                     className={`p-2.5 rounded-xl text-xs font-bold border transition text-left ${
                       formData.party_type.startsWith('Non-Veg')
-                        ? 'bg-red-900/30 border-red-500 text-red-300'
-                        : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                        ? 'bg-red-100 border-red-400 text-red-700'
+                        : 'bg-gray-50 border-gray-200 text-gray-600'
                     }`}
                   >
                     🍗 Non-Veg (At Your Venue)
@@ -177,7 +177,7 @@ export default function PartyModal({ isOpen, onClose }) {
               {/* Name & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">Your Name *</label>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1">Your Name *</label>
                   <input
                     type="text"
                     required
@@ -189,7 +189,7 @@ export default function PartyModal({ isOpen, onClose }) {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">Phone Number *</label>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1">Phone Number *</label>
                   <input
                     type="tel"
                     required
@@ -205,18 +205,18 @@ export default function PartyModal({ isOpen, onClose }) {
               {/* Event Date & Guests */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">Event Date *</label>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1">Event Date *</label>
                   <input
                     type="date"
                     required
                     value={formData.event_date}
                     onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
-                    className="custom-input text-white"
+                    className="custom-input"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">Approx. Guests *</label>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1">Approx. Guests *</label>
                   <input
                     type="number"
                     min={10}
@@ -230,7 +230,7 @@ export default function PartyModal({ isOpen, onClose }) {
 
               {/* Special Requirements */}
               <div>
-                <label className="text-xs font-semibold text-zinc-300 block mb-1">Party Location &amp; Dish Preferences</label>
+                <label className="text-xs font-semibold text-gray-600 block mb-1">Party Location &amp; Dish Preferences</label>
                 <textarea
                   rows={2}
                   placeholder="e.g. Society clubhouse in Malad West, need Manchurian Chopper Rice, Paneer Chilli, Spring rolls..."

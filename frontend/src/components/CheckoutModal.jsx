@@ -6,16 +6,25 @@ export default function CheckoutModal({
   isOpen,
   onClose,
   cartItems,
-  onOrderPlaced
+  onOrderPlaced,
+  user,
+  onOpenAuthModal
 }) {
   const [formData, setFormData] = useState({
-    customer_name: '',
+    customer_name: user?.name || '',
     customer_phone: '',
     delivery_address: '',
     delivery_notes: '',
     order_type: 'Delivery',
     payment_method: 'Cash on Delivery'
   });
+
+  // Sync with user change if logged in
+  React.useEffect(() => {
+    if (user?.name && !formData.customer_name) {
+      setFormData(prev => ({ ...prev, customer_name: user.name }));
+    }
+  }, [user]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -51,6 +60,7 @@ export default function CheckoutModal({
 
     try {
       const orderPayload = {
+        user_id: user?.id || null,
         customer_name: formData.customer_name.trim(),
         customer_phone: cleanPhone,
         delivery_address: formData.order_type === 'Delivery' ? formData.delivery_address.trim() : 'Takeaway / Self-Pickup from Counter (Liberty Garden)',
@@ -229,6 +239,38 @@ export default function CheckoutModal({
                   </button>
                 </div>
               </div>
+
+              {/* Google Account Status / Quick Fill */}
+              {user ? (
+                <div className="flex items-center justify-between p-2.5 bg-zinc-900/90 border border-amber-500/30 rounded-xl text-xs">
+                  <div className="flex items-center gap-2">
+                    {user.picture ? (
+                      <img src={user.picture} alt={user.name} className="w-5 h-5 rounded-full object-cover ring-1 ring-amber-400" />
+                    ) : (
+                      <div className="w-5 h-5 rounded-full bg-amber-500 text-zinc-950 text-[10px] font-bold flex items-center justify-center">
+                        {user.name?.[0] || 'U'}
+                      </div>
+                    )}
+                    <span className="text-zinc-300">Ordering as <strong className="text-white">{user.name}</strong></span>
+                  </div>
+                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                    Google Account
+                  </span>
+                </div>
+              ) : onOpenAuthModal ? (
+                <div className="flex items-center justify-between p-2.5 bg-zinc-900/80 border border-zinc-800 rounded-xl text-xs">
+                  <span className="text-zinc-400">Have a Google account?</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onOpenAuthModal();
+                    }}
+                    className="text-amber-400 font-bold hover:underline inline-flex items-center gap-1 text-[11px]"
+                  >
+                    Sign in with Google →
+                  </button>
+                </div>
+              ) : null}
 
               {/* Customer Name */}
               <div>

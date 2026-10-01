@@ -2,14 +2,14 @@ import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine, Base, SessionLocal
+from .database import engine, Base, SessionLocal, init_db
 from .seed_data import seed_database
-from .routes import restaurant, menu, orders, party, dashboard
+from .routes import restaurant, menu, orders, party, dashboard, auth
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Create tables and seed DB safely
-    Base.metadata.create_all(bind=engine)
+    init_db()
     db = SessionLocal()
     try:
         seed_database(db)
@@ -51,6 +51,7 @@ app.include_router(menu.router)
 app.include_router(orders.router)
 app.include_router(party.router)
 app.include_router(dashboard.router)
+app.include_router(auth.router)
 
 @app.get("/")
 def read_root():
