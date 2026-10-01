@@ -338,27 +338,27 @@ export default function App() {
         )}
       </main>
 
-      {/* Floating Bottom Cart Bar */}
+      {/* Floating Bottom Cart Bar - Minimalist */}
       {totalCartCount > 0 && !isCartOpen && (
-        <div className="fixed bottom-4 inset-x-4 max-w-md mx-auto z-40">
+        <div className="fixed bottom-5 inset-x-4 max-w-md mx-auto z-40">
           <div 
             onClick={() => setIsCartOpen(true)}
-            className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 text-zinc-950 font-bold shadow-2xl border border-amber-300 flex items-center justify-between cursor-pointer hover:scale-[1.02] active:scale-95 transition"
+            className="px-4 py-3 rounded-xl bg-foreground text-background font-semibold shadow-xl border border-border flex items-center justify-between cursor-pointer hover:opacity-95 active:scale-95 transition"
           >
-            <div className="flex items-center gap-2.5">
-              <div className="bg-zinc-950 text-amber-300 text-xs font-black w-7 h-7 rounded-full flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <span className="bg-primary text-black text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
                 {totalCartCount}
-              </div>
-              <div className="text-xs sm:text-sm font-semibold">
+              </span>
+              <div className="text-xs sm:text-sm">
                 <span>View Basket</span>
-                <span className="mx-1.5 opacity-60">•</span>
-                <span className="font-extrabold text-sm sm:text-base">₹{cartSubtotal}</span>
+                <span className="mx-2 opacity-40">/</span>
+                <span className="font-bold">₹{cartSubtotal}</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
               <span>Checkout</span>
-              <ArrowRight className="w-4 h-4 stroke-[3]" />
+              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flame, Star, Plus, Minus, Check } from 'lucide-react';
+import { Flame, Star, Plus, Minus } from 'lucide-react';
 
 export default function MenuCard({ 
   item, 
@@ -31,9 +31,9 @@ export default function MenuCard({
   };
 
   return (
-    <div className="food-card">
+    <div className="food-card flex flex-col justify-between">
       <div>
-        {/* Top Header: Veg mark & Badges */}
+        {/* Top Indicators */}
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-2">
             <span className="veg-badge" title="100% Pure Vegetarian">
@@ -57,23 +57,23 @@ export default function MenuCard({
         </div>
 
         {/* Item Title */}
-        <h4 className="text-base sm:text-lg font-bold text-white leading-snug font-heading">
+        <h4 className="text-base font-bold text-foreground leading-snug">
           {item.name}
         </h4>
 
         {/* Item Description */}
-        <p className="text-xs sm:text-[13px] text-zinc-300 mt-1.5 leading-relaxed line-clamp-2">
+        <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed line-clamp-2">
           {item.description}
         </p>
       </div>
 
-      <div className="mt-4 pt-3.5 border-t border-zinc-800/80 space-y-3">
+      <div className="mt-4 pt-3.5 border-t border-border/80 space-y-3">
         {/* Portion Selector Tabs */}
         <div>
-          <div className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-            <span>Select Portion:</span>
+          <div className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+            <span>Portion</span>
             {!hasHalfOption && (
-              <span className="text-amber-400/90 font-medium lowercase">(full portion only)</span>
+              <span className="text-zinc-500 font-normal lowercase">(full only)</span>
             )}
           </div>
 
@@ -84,8 +84,8 @@ export default function MenuCard({
                 onClick={() => setSelectedPortion('Half')}
                 className={`portion-toggle-btn ${selectedPortion === 'Half' ? 'active' : ''}`}
               >
-                <span>Half Portion</span>
-                <span className="font-extrabold opacity-95">• ₹{item.half_price}</span>
+                <span>Half</span>
+                <span className="font-semibold opacity-90">₹{item.half_price}</span>
               </button>
             )}
 
@@ -94,8 +94,8 @@ export default function MenuCard({
               onClick={() => setSelectedPortion('Full')}
               className={`portion-toggle-btn ${selectedPortion === 'Full' ? 'active' : ''}`}
             >
-              <span>Full Portion</span>
-              <span className="font-extrabold opacity-95">• ₹{item.full_price}</span>
+              <span>Full</span>
+              <span className="font-semibold opacity-90">₹{item.full_price}</span>
             </button>
           </div>
         </div>
@@ -103,10 +103,10 @@ export default function MenuCard({
         {/* Price & Action Row */}
         <div className="flex items-center justify-between pt-1">
           <div>
-            <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold block">
-              Total ({selectedPortion})
+            <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold block">
+              {selectedPortion} Portion
             </span>
-            <div className="text-xl sm:text-2xl font-black text-amber-400 font-heading tracking-tight">
+            <div className="text-xl font-bold text-foreground tracking-tight">
               ₹{activePrice}
             </div>
           </div>
@@ -116,10 +116,10 @@ export default function MenuCard({
             <button
               type="button"
               onClick={handleAdd}
-              className="btn-primary text-xs sm:text-sm py-2 px-4 rounded-xl flex items-center gap-1.5 shadow-md hover:scale-[1.03] active:scale-95 transition"
+              className="btn-primary text-xs py-1.5 px-3.5 rounded-lg flex items-center gap-1.5"
             >
-              <Plus className="w-4 h-4 text-zinc-950 stroke-[3]" />
-              <span>ADD</span>
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Add</span>
             </button>
           ) : (
             <div className="qty-stepper">
@@ -129,7 +129,7 @@ export default function MenuCard({
                 className="qty-btn"
                 aria-label="Decrease quantity"
               >
-                <Minus className="w-3.5 h-3.5 stroke-[3]" />
+                <Minus className="w-3.5 h-3.5" />
               </button>
               <span className="qty-val">{currentQuantity}</span>
               <button
@@ -138,7 +138,7 @@ export default function MenuCard({
                 className="qty-btn"
                 aria-label="Increase quantity"
               >
-                <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                <Plus className="w-3.5 h-3.5" />
               </button>
             </div>
           )}

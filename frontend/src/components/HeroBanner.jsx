@@ -1,56 +1,56 @@
 import React from 'react';
-import { Phone, MapPin, Clock, Truck, Flame, Sparkles, Utensils, Award } from 'lucide-react';
+import { Phone, MapPin, Clock, Truck, Flame, Sparkles, Utensils } from 'lucide-react';
 
 export default function HeroBanner({ restaurant, onOpenPartyModal }) {
   return (
-    <div className="relative overflow-hidden pt-6 pb-8 border-b border-zinc-800/80 bg-gradient-to-b from-zinc-950 via-zinc-900/40 to-zinc-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+    <section className="border-b border-border/80 bg-surface/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
-          {/* Main Hero Text */}
+          {/* Main Hero Information */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold tracking-wide">
-              <Flame className="w-3.5 h-3.5 text-red-500" />
-              <span>FRESHLY TOSS-FRIED IN SUPER HEATED WOKS</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-wide">
+              <Flame className="w-3.5 h-3.5 text-red-400" />
+              <span>SUPER HEATED LIVE WOK SPECIALS</span>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl font-black text-white leading-[1.15] font-heading">
+            <h1 className="text-3xl sm:text-5xl font-black text-foreground tracking-tight leading-tight">
               Hot Indo-Chinese at <br className="hidden sm:inline" />
-              <span className="gold-gradient-text">YUMMY EXPRESS</span>
-            </h2>
+              <span className="text-primary">YUMMY EXPRESS</span>
+            </h1>
 
-            <p className="text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed">
-              Order steaming hot soups, crispy starters, triple Schezwan woks, and stir-fried noodles cooked fresh on order in Malad West.
+            <p className="text-zinc-400 text-sm sm:text-base max-w-xl leading-relaxed">
+              Steaming hot soups, crispy wok-tossed starters, triple Schezwan rice, and stir-fried noodles made fresh to order in Malad West.
             </p>
 
-            {/* Structured Info Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-              <div className="p-3 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center gap-3">
+            {/* Structured Info Chips */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+              <div className="p-3 rounded-xl bg-surface border border-border flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 shrink-0">
                   <Truck className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-white">Free Delivery</div>
-                  <div className="text-[11px] text-zinc-400">Malad West area</div>
+                  <div className="text-xs font-bold text-foreground">Free Delivery</div>
+                  <div className="text-[11px] text-zinc-400">Malad West</div>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-surface border border-border flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 shrink-0">
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-white">7:30 PM – 11:30 PM</div>
-                  <div className="text-[11px] text-zinc-400">Dinner timings</div>
+                  <div className="text-xs font-bold text-foreground">7:30 PM – 11:30 PM</div>
+                  <div className="text-[11px] text-zinc-400">Dinner Service</div>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-surface border border-border flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-red-500/10 text-red-400 shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-white">Liberty Garden</div>
+                  <div className="text-xs font-bold text-foreground">Liberty Garden</div>
                   <div className="text-[11px] text-zinc-400">Opp. BMC Office</div>
                 </div>
               </div>
@@ -63,7 +63,7 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
                 className="btn-primary"
               >
                 <Utensils className="w-4 h-4" />
-                <span>Explore Full Menu</span>
+                <span>Explore Menu</span>
               </a>
 
               <a 
@@ -71,39 +71,39 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
                 className="btn-secondary"
               >
                 <Phone className="w-4 h-4 text-emerald-400" />
-                <span>Call Kitchen: 7249041603</span>
+                <span>Call: 7249041603</span>
               </a>
             </div>
           </div>
 
-          {/* Party Catering Promo Card */}
+          {/* Party Catering Promo Card - Clean Minimalist */}
           <div className="lg:col-span-5">
-            <div className="rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-amber-950/40 via-zinc-900 to-zinc-950 border border-amber-500/40 shadow-xl space-y-3">
+            <div className="rounded-2xl p-6 bg-surface border border-border shadow-sm space-y-3 relative overflow-hidden">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-md bg-red-600/30 text-red-300 border border-red-500/40">
-                  Special Catering
+                <span className="text-[11px] uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+                  Party Catering
                 </span>
-                <span className="text-amber-300 text-xs font-bold flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5" /> Party Orders
+                <span className="text-primary text-xs font-medium flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5" /> Live Counters
                 </span>
               </div>
 
-              <h3 className="text-lg sm:text-xl font-black text-amber-300 font-heading">
-                🎉 Orders for Any Kind of Party!
+              <h3 className="text-lg sm:text-xl font-bold text-foreground">
+                Orders for Any Kind of Party
               </h3>
               
-              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                Hosting a celebration or gathering? We prepare bulk live wok counters for our pure veg menu &amp; <strong className="text-amber-200">cater non-veg parties exclusively at your venue</strong>!
+              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                Hosting an event? We bring live wok counters for pure veg parties, plus <span className="text-primary font-medium">exclusive non-veg live catering at your venue</span>.
               </p>
 
-              <div className="flex items-center justify-between gap-3 pt-2 border-t border-zinc-800">
+              <div className="flex items-center justify-between gap-3 pt-3 border-t border-border">
                 <span className="text-[11px] text-zinc-400">
-                  Customized packages &amp; live chef
+                  Custom live setups &amp; packages
                 </span>
                 <button 
                   type="button"
                   onClick={onOpenPartyModal}
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-zinc-950 bg-amber-400 hover:bg-amber-300 transition shadow-sm"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-black bg-primary hover:bg-primary-hover transition"
                 >
                   Inquire Now &rarr;
                 </button>
@@ -113,6 +113,6 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
 
         </div>
       </div>
-    </div>
+    </section>
   );
 }

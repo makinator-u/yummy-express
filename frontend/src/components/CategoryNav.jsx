@@ -13,33 +13,18 @@ export default function CategoryNav({
   onToggleBestsellers,
   totalItemsCount
 }) {
-  const getCategoryIcon = (slug) => {
-    switch (slug) {
-      case 'veg-soup':
-        return '🥣';
-      case 'veg-starters':
-        return '🥟';
-      case 'veg-rice':
-        return '🍚';
-      case 'veg-noodles':
-        return '🍜';
-      default:
-        return '🥢';
-    }
-  };
-
   return (
-    <div className="sticky top-[73px] z-40 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/90 py-3 shadow-md">
+    <div className="sticky top-[69px] z-30 bg-background/90 backdrop-blur-md border-b border-border py-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
         
         {/* Search Bar & Quick Filter Chips */}
         <div className="flex flex-col sm:flex-row items-center gap-3 justify-between">
           {/* Search Box */}
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400/80" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
             <input 
               type="text"
-              placeholder="Search Manchurian, Hakka, Schezwan, Paneer, Soups..."
+              placeholder="Search dishes (e.g. Manchurian, Hakka, Schezwan)..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="custom-input pl-10 pr-9 py-2 text-xs sm:text-sm"
@@ -61,27 +46,27 @@ export default function CategoryNav({
             <button
               type="button"
               onClick={onToggleBestsellers}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition border ${
                 showBestsellersOnly
-                  ? 'bg-amber-400 text-zinc-950 shadow-md font-extrabold'
-                  : 'bg-zinc-900 text-amber-300 border border-amber-500/30 hover:bg-zinc-800'
+                  ? 'bg-primary text-black border-primary font-bold'
+                  : 'bg-surface text-zinc-300 border-border hover:bg-surface-elevated hover:text-white'
               }`}
             >
               <Star className="w-3.5 h-3.5 fill-current" />
-              <span>Popular Picks</span>
+              <span>Bestsellers</span>
             </button>
 
             <button
               type="button"
               onClick={onToggleSpicy}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition border ${
                 showSpicyOnly
-                  ? 'bg-red-600 text-white shadow-md font-extrabold'
-                  : 'bg-zinc-900 text-red-300 border border-red-500/30 hover:bg-zinc-800'
+                  ? 'bg-red-500 text-white border-red-500 font-bold'
+                  : 'bg-surface text-zinc-300 border-border hover:bg-surface-elevated hover:text-white'
               }`}
             >
               <Flame className="w-3.5 h-3.5 fill-current" />
-              <span>Spicy Specials</span>
+              <span>Spicy</span>
             </button>
           </div>
         </div>
@@ -91,14 +76,13 @@ export default function CategoryNav({
           <button
             type="button"
             onClick={() => onSelectCategory(null)}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition border ${
               selectedCategory === null
-                ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-zinc-950 shadow-md font-black'
-                : 'bg-zinc-900 text-zinc-300 border border-zinc-800 hover:border-amber-500/40 hover:text-white'
+                ? 'bg-foreground text-background border-foreground font-semibold'
+                : 'bg-surface text-zinc-400 border-border hover:text-foreground hover:bg-surface-elevated'
             }`}
           >
-            <span>🥢</span>
-            <span>All Menu ({totalItemsCount})</span>
+            All Items ({totalItemsCount})
           </button>
 
           {categories.map((cat) => {
@@ -108,14 +92,13 @@ export default function CategoryNav({
                 key={cat.id}
                 type="button"
                 onClick={() => onSelectCategory(cat.slug)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition border ${
                   isSelected
-                    ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-zinc-950 shadow-md font-black'
-                    : 'bg-zinc-900 text-zinc-300 border border-zinc-800 hover:border-amber-500/40 hover:text-white'
+                    ? 'bg-foreground text-background border-foreground font-semibold'
+                    : 'bg-surface text-zinc-400 border-border hover:text-foreground hover:bg-surface-elevated'
                 }`}
               >
-                <span>{getCategoryIcon(cat.slug)}</span>
-                <span>{cat.name} ({cat.items ? cat.items.length : 0})</span>
+                {cat.name} ({cat.items ? cat.items.length : 0})
               </button>
             );
           })}
