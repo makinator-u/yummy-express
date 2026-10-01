@@ -19,8 +19,6 @@ class Base(DeclarativeBase):
     pass
 
 def init_db():
-    # Explicitly import models so SQLAlchemy metadata registers all tables
-    from . import models
     Base.metadata.create_all(bind=engine)
     # Check and perform lightweight SQLite column migrations
     with engine.connect() as conn:
