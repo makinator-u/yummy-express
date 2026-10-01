@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base, SessionLocal, init_db
 from .seed_data import seed_database
-from .routes import restaurant, menu, orders, party, dashboard, auth
+from .routes import restaurant, menu, orders, party, dashboard
 
 # Startup: Create tables and seed DB safely on startup / module import
 try:
@@ -49,7 +49,6 @@ app.include_router(menu.router, prefix="/api/menu")
 app.include_router(orders.router, prefix="/api/orders")
 app.include_router(party.router, prefix="/api/party")
 app.include_router(dashboard.router, prefix="/api/dashboard")
-app.include_router(auth.router, prefix="/api/auth")
 
 # Also include Routers with root prefix (for Vercel serverless functions that forward stripped subpaths)
 app.include_router(restaurant.router, prefix="/restaurant")
@@ -57,7 +56,7 @@ app.include_router(menu.router, prefix="/menu")
 app.include_router(orders.router, prefix="/orders")
 app.include_router(party.router, prefix="/party")
 app.include_router(dashboard.router, prefix="/dashboard")
-app.include_router(auth.router, prefix="/auth")
+
 
 @app.get("/")
 def read_root():

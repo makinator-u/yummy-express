@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { X, Sparkles, CheckCircle2, Phone, Calendar, Users, UtensilsCrossed, AlertCircle, MessageSquare } from 'lucide-react';
+import { X, Sparkles, CheckCircle2, MessageSquare, AlertCircle } from 'lucide-react';
 import { API_BASE } from '../config/api';
 
-export default function PartyModal({ isOpen, onClose }) {
+export default function PartyModal({ isOpen, onClose, restaurant }) {
+  const phone = restaurant?.phone || '7249041603';
+  const rawPhone = phone.replace(/\D/g, '');
+  const partyCateringText = restaurant?.party_catering_text || 'We also take orders for any kind of party & We take orders for non-veg parties only at your place';
+
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_phone: '',
@@ -59,15 +63,15 @@ export default function PartyModal({ isOpen, onClose }) {
 
       setSubmitted(true);
     } catch (err) {
-      setError(err.message || 'Error submitting party inquiry. Please call us directly at 7249041603.');
+      setError(err.message || `Error submitting party inquiry. Please call us directly at ${phone}.`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleWhatsAppInquiry = () => {
-    const text = `*YUMMY EXPRESS PARTY CATERING INQUIRY*%0A%0A*Name:* ${formData.customer_name}%0A*Phone:* ${formData.customer_phone}%0A*Date:* ${formData.event_date}%0A*Guests:* ${formData.approx_guests}%0A*Party Type:* ${formData.party_type}%0A*Notes:* ${formData.notes || 'N/A'}%0A%0APlease share your party package menu and quote!`;
-    window.open(`https://wa.me/917249041603?text=${text}`, '_blank');
+    const text = `*${restaurant?.name || 'YUMMY EXPRESS'} PARTY CATERING INQUIRY*%0A%0A*Name:* ${formData.customer_name}%0A*Phone:* ${formData.customer_phone}%0A*Date:* ${formData.event_date}%0A*Guests:* ${formData.approx_guests}%0A*Party Type:* ${formData.party_type}%0A*Notes:* ${formData.notes || 'N/A'}%0A%0APlease share your party package menu and quote!`;
+    window.open(`https://wa.me/91${rawPhone}?text=${text}`, '_blank');
   };
 
   return (
@@ -103,7 +107,7 @@ export default function PartyModal({ isOpen, onClose }) {
         <div className="p-3 bg-amber-50 border-b border-amber-200 text-xs text-amber-800 flex items-center gap-2">
           <span>🔥</span>
           <span>
-            <strong>Menu Special:</strong> We take orders for any kind of party &amp; <em className="text-amber-400 underline">non-veg parties only at your place</em>!
+            <strong>Special:</strong> {partyCateringText}
           </span>
         </div>
 
@@ -117,7 +121,7 @@ export default function PartyModal({ isOpen, onClose }) {
                 Party Inquiry Received!
               </h4>
               <p className="text-xs text-gray-600 max-w-sm mx-auto leading-relaxed">
-                Thank you, <strong>{formData.customer_name}</strong>. Chef team from Yummy Express will contact you shortly on <strong>{formData.customer_phone}</strong> to customize your menu.
+                Thank you, <strong>{formData.customer_name}</strong>. Chef team from {restaurant?.name || 'Yummy Express'} will contact you shortly on <strong>{formData.customer_phone}</strong> to customize your menu.
               </p>
 
               <div className="space-y-2 pt-2">
@@ -126,7 +130,7 @@ export default function PartyModal({ isOpen, onClose }) {
                   className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-green-600 hover:bg-green-500 transition shadow-lg flex items-center justify-center gap-2"
                 >
                   <MessageSquare className="w-4 h-4" />
-                  <span>Chat on WhatsApp Directly (7249041603)</span>
+                  <span>Chat on WhatsApp Directly ({phone})</span>
                 </button>
                 <button
                   onClick={onClose}

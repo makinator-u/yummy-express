@@ -7,8 +7,6 @@ import CartDrawer from './components/CartDrawer';
 import CheckoutModal from './components/CheckoutModal';
 import PartyModal from './components/PartyModal';
 import OrderTrackerModal from './components/OrderTrackerModal';
-import GoogleAuthModal from './components/GoogleAuthModal';
-import UserOrdersModal from './components/UserOrdersModal';
 import Footer from './components/Footer';
 import DashboardView from './components/Dashboard/DashboardView';
 import { ArrowRight, RefreshCw, AlertTriangle } from 'lucide-react';
@@ -19,20 +17,6 @@ export default function App() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Auth state from localStorage
-  const [user, setUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ye_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  const [authToken, setAuthToken] = useState(() => {
-    return localStorage.getItem('ye_auth_token') || '';
-  });
 
   // View state: 'store' or 'dashboard'
   const [currentView, setCurrentView] = useState('store');
@@ -58,39 +42,9 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isPartyModalOpen, setIsPartyModalOpen] = useState(false);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isMyOrdersOpen, setIsMyOrdersOpen] = useState(false);
   const [initialTrackNumber, setInitialTrackNumber] = useState('');
 
-  // Auth Handlers
-  const handleAuthSuccess = (authData) => {
-    setUser(authData.user);
-    setAuthToken(authData.token);
-    try {
-      localStorage.setItem('ye_user', JSON.stringify(authData.user));
-      localStorage.setItem('ye_auth_token', authData.token);
-    } catch (e) {
-      console.error('Failed to save user session', e);
-    }
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setAuthToken('');
-    try {
-      localStorage.removeItem('ye_user');
-      localStorage.removeItem('ye_auth_token');
-    } catch (e) {
-      console.error('Failed to clear user session', e);
-    }
-  };
-
-  const handleTrackFromOrders = (orderNumber) => {
-    setInitialTrackNumber(orderNumber);
-    setIsTrackModalOpen(true);
-  };
-
-  // Sync to local storage
+  // Sync cart to local storage
   useEffect(() => {
     try {
       localStorage.setItem('ye_cart', JSON.stringify(cartItems));
@@ -224,10 +178,6 @@ export default function App() {
           setIsTrackModalOpen(true);
         }}
         onOpenDashboard={() => setCurrentView('dashboard')}
-        user={user}
-        onOpenAuthModal={() => setIsAuthModalOpen(true)}
-        onLogout={handleLogout}
-        onOpenMyOrders={() => setIsMyOrdersOpen(true)}
       />
 
       {/* Main Content */}
@@ -241,7 +191,7 @@ export default function App() {
         {loading && (
           <div className="py-24 text-center space-y-3">
             <div className="w-10 h-10 border-3 border-amber-500/20 border-t-amber-400 rounded-full animate-spin mx-auto" />
-            <p className="text-sm font-semibold text-gray-500">Loading fresh menu from SQLite database...</p>
+            <p className="text-sm font-semibold text-gray-500">Loading fresh menu from database...</p>
           </div>
         )}
 
@@ -337,7 +287,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Floating Bottom Cart Bar - Minimalist */}
+      {/* Floating Bottom Cart Bar */}
       {totalCartCount > 0 && !isCartOpen && (
         <div className="fixed bottom-5 inset-x-4 max-w-md mx-auto z-40">
           <div 
@@ -378,16 +328,13 @@ export default function App() {
         onClose={() => setIsCheckoutOpen(false)}
         cartItems={cartItems}
         onOrderPlaced={() => setCartItems([])}
-        user={user}
-        onOpenAuthModal={() => {
-          setIsCheckoutOpen(false);
-          setIsAuthModalOpen(true);
-        }}
+        restaurant={restaurant}
       />
 
       <PartyModal
         isOpen={isPartyModalOpen}
         onClose={() => setIsPartyModalOpen(false)}
+        restaurant={restaurant}
       />
 
       <OrderTrackerModal
@@ -397,20 +344,7 @@ export default function App() {
           setInitialTrackNumber('');
         }}
         initialOrderNumber={initialTrackNumber}
-      />
-
-      <GoogleAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onAuthSuccess={handleAuthSuccess}
-      />
-
-      <UserOrdersModal
-        isOpen={isMyOrdersOpen}
-        onClose={() => setIsMyOrdersOpen(false)}
-        token={authToken}
-        user={user}
-        onTrackOrder={handleTrackFromOrders}
+        restaurant={restaurant}
       />
 
       <Footer

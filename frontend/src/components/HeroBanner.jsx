@@ -2,6 +2,14 @@ import React from 'react';
 import { Phone, MapPin, Clock, Truck, Flame, Sparkles, Utensils } from 'lucide-react';
 
 export default function HeroBanner({ restaurant, onOpenPartyModal }) {
+  const phone = restaurant?.phone || '7249041603';
+  const timing = restaurant?.timing || '7:30 PM to 11:30 PM';
+  const address = restaurant?.address || 'In front of BMC Office, Near Liberty Garden (Khaugalli), Malad West';
+  const name = restaurant?.name || 'YUMMY EXPRESS';
+  const deliveryNote = restaurant?.delivery_note || 'Free Delivery';
+  const bannerText = restaurant?.banner_text || 'Steaming hot soups, crispy wok-tossed starters, triple Schezwan rice, and stir-fried noodles made fresh to order in Malad West.';
+  const partyCateringText = restaurant?.party_catering_text || 'We also take orders for any kind of party & We take orders for non-veg parties only at your place';
+
   return (
     <section className="border-b border-gray-200 bg-gray-50/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -16,11 +24,11 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
 
             <h1 className="text-3xl sm:text-5xl font-black text-gray-900 tracking-tight leading-tight">
               Hot Indo-Chinese at <br className="hidden sm:inline" />
-              <span className="text-amber-600">YUMMY EXPRESS</span>
+              <span className="text-amber-600">{name}</span>
             </h1>
 
             <p className="text-gray-500 text-sm sm:text-base max-w-xl leading-relaxed">
-              Steaming hot soups, crispy wok-tossed starters, triple Schezwan rice, and stir-fried noodles made fresh to order in Malad West.
+              {bannerText}
             </p>
 
             {/* Structured Info Chips */}
@@ -30,7 +38,7 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
                   <Truck className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gray-800">Free Delivery</div>
+                  <div className="text-xs font-bold text-gray-800">{deliveryNote}</div>
                   <div className="text-[11px] text-gray-400">Malad West</div>
                 </div>
               </div>
@@ -40,7 +48,7 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gray-800">7:30 PM – 11:30 PM</div>
+                  <div className="text-xs font-bold text-gray-800">{timing}</div>
                   <div className="text-[11px] text-gray-400">Dinner Service</div>
                 </div>
               </div>
@@ -67,11 +75,11 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
               </a>
 
               <a 
-                href="tel:7249041603"
+                href={`tel:${phone}`}
                 className="btn-secondary"
               >
-                <Phone className="w-4 h-4 text-emerald-400" />
-                <span>Call: 7249041603</span>
+                <Phone className="w-4 h-4 text-emerald-500" />
+                <span>Call: {phone}</span>
               </a>
             </div>
           </div>
@@ -93,7 +101,7 @@ export default function HeroBanner({ restaurant, onOpenPartyModal }) {
               </h3>
               
               <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-                Hosting an event? We bring live wok counters for pure veg parties, plus <span className="text-amber-600 font-medium">exclusive non-veg live catering at your venue</span>.
+                {partyCateringText}
               </p>
 
               <div className="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">

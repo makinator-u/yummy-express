@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { X, Search, Clock, CheckCircle2, Flame, Bike, Utensils, AlertCircle, Phone } from 'lucide-react';
 import { API_BASE } from '../config/api';
 
-export default function OrderTrackerModal({ isOpen, onClose, initialOrderNumber = '' }) {
+export default function OrderTrackerModal({ isOpen, onClose, initialOrderNumber = '', restaurant }) {
   const [orderNumber, setOrderNumber] = useState(initialOrderNumber || '');
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState(null);
   const [error, setError] = useState('');
+
+  const phone = restaurant?.phone || '7249041603';
 
   React.useEffect(() => {
     if (isOpen && initialOrderNumber) {
@@ -169,11 +171,11 @@ export default function OrderTrackerModal({ isOpen, onClose, initialOrderNumber 
 
               {/* Call Support */}
               <a
-                href="tel:7249041603"
+                href={`tel:${phone}`}
                 className="w-full btn-secondary text-xs sm:text-sm py-2.5 flex items-center justify-center gap-2"
               >
                 <Phone className="w-4 h-4 text-green-600" />
-                <span>Call Kitchen at 7249041603</span>
+                <span>Call Kitchen at {phone}</span>
               </a>
             </div>
           )}
