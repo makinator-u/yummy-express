@@ -2,7 +2,12 @@ import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-DB_PATH = os.environ.get("DB_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "yummy_express.db"))
+if os.environ.get("VERCEL"):
+    default_db = "/tmp/yummy_express.db"
+else:
+    default_db = os.path.join(os.path.dirname(os.path.dirname(__file__)), "yummy_express.db")
+
+DB_PATH = os.environ.get("DB_PATH", default_db)
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 engine = create_engine(

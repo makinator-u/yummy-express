@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
-
-const API_BASE = 'http://localhost:8000/api';
+import { API_BASE } from '../config/api';
 
 export default function GoogleAuthModal({ isOpen, onClose, onAuth }) {
   const [loading, setLoading] = useState(false);

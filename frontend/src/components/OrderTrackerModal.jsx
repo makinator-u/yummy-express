@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Search, Clock, CheckCircle2, Flame, Bike, Utensils, AlertCircle, Phone } from 'lucide-react';
+import { API_BASE } from '../config/api';
 
 export default function OrderTrackerModal({ isOpen, onClose, initialOrderNumber = '' }) {
   const [orderNumber, setOrderNumber] = useState(initialOrderNumber || '');
@@ -21,7 +22,7 @@ export default function OrderTrackerModal({ isOpen, onClose, initialOrderNumber 
     setError('');
     setOrder(null);
     try {
-      const res = await fetch(`http://localhost:8000/api/orders/${num.trim()}`);
+      const res = await fetch(`${API_BASE}/orders/${num.trim()}`);
       if (!res.ok) throw new Error('Order number not found. Please check and try again.');
       const data = await res.json();
       setOrder(data);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Plus, AlertCircle } from 'lucide-react';
+import { API_BASE } from '../../config/api';
 
 export default function AddDishModal({ isOpen, onClose, categories, onDishAdded }) {
   const [formData, setFormData] = useState({
@@ -44,7 +45,7 @@ export default function AddDishModal({ isOpen, onClose, categories, onDishAdded 
         is_bestseller: formData.is_bestseller
       };
 
-      const res = await fetch('http://localhost:8000/api/dashboard/menu/items', {
+      const res = await fetch(`${API_BASE}/dashboard/menu/items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
