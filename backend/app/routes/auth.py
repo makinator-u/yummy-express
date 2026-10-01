@@ -11,7 +11,7 @@ from ..database import get_db
 from ..models import User, Order
 from ..schemas import GoogleAuthRequest, AuthResponse, UserOut, OrderOut
 
-router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+router = APIRouter(tags=["Authentication"])
 
 AUTH_SECRET = os.environ.get("AUTH_SECRET", "yummy_express_google_auth_secret_key_2026")
 

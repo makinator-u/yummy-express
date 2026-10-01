@@ -5,7 +5,7 @@ from ..database import get_db
 from ..models import PartyInquiry
 from ..schemas import PartyInquiryCreate, PartyInquiryOut
 
-router = APIRouter(prefix="/api/party", tags=["Party Catering"])
+router = APIRouter(tags=["Party Catering"])
 
 @router.post("/inquiry", response_model=PartyInquiryOut)
 def create_party_inquiry(inquiry: PartyInquiryCreate, db: Session = Depends(get_db)):

@@ -4,9 +4,10 @@ from ..database import get_db
 from ..models import Restaurant
 from ..schemas import RestaurantOut
 
-router = APIRouter(prefix="/api/restaurant", tags=["Restaurant"])
+router = APIRouter(tags=["Restaurant"])
 
 @router.get("", response_model=RestaurantOut)
+@router.get("/", response_model=RestaurantOut)
 def get_restaurant_info(db: Session = Depends(get_db)):
     restaurant = db.query(Restaurant).first()
     if not restaurant:

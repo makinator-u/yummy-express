@@ -6,9 +6,19 @@ from .database import engine, Base, SessionLocal, init_db
 from .seed_data import seed_database
 from .routes import restaurant, menu, orders, party, dashboard, auth
 
+# Startup: Create tables and seed DB safely on startup / module import
+try:
+    init_db()
+    db = SessionLocal()
+    try:
+        seed_database(db)
+    finally:
+        db.close()
+except Exception as e:
+    print("DB Init note on module import:", e)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Create tables and seed DB safely
     init_db()
     db = SessionLocal()
     try:
@@ -16,7 +26,6 @@ async def lifespan(app: FastAPI):
     finally:
         db.close()
     yield
-    # Shutdown: Clean up resources if needed
 
 app = FastAPI(
     title="YUMMY EXPRESS API",
@@ -25,33 +34,30 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS with explicit allowed origins & regex for local dev
-allowed_origins_env = os.environ.get("CORS_ORIGINS", "")
-allowed_origins = [orig.strip() for orig in allowed_origins_env.split(",") if orig.strip()] or [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000"
-]
-
+# Enable CORS for all origins (supports Vercel preview & production URLs, localhost)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include Routers
-app.include_router(restaurant.router)
-app.include_router(menu.router)
-app.include_router(orders.router)
-app.include_router(party.router)
-app.include_router(dashboard.router)
-app.include_router(auth.router)
+# Include Routers with /api prefix (for standard web requests)
+app.include_router(restaurant.router, prefix="/api/restaurant")
+app.include_router(menu.router, prefix="/api/menu")
+app.include_router(orders.router, prefix="/api/orders")
+app.include_router(party.router, prefix="/api/party")
+app.include_router(dashboard.router, prefix="/api/dashboard")
+app.include_router(auth.router, prefix="/api/auth")
+
+# Also include Routers with root prefix (for Vercel serverless functions that forward stripped subpaths)
+app.include_router(restaurant.router, prefix="/restaurant")
+app.include_router(menu.router, prefix="/menu")
+app.include_router(orders.router, prefix="/orders")
+app.include_router(party.router, prefix="/party")
+app.include_router(dashboard.router, prefix="/dashboard")
+app.include_router(auth.router, prefix="/auth")
 
 @app.get("/")
 def read_root():
