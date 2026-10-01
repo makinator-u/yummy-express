@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Sparkles, CheckCircle2, Phone, Calendar, Users, UtensilsCrossed, AlertCircle, MessageSquare } from 'lucide-react';
+import { API_BASE } from '../config/api';
 
 export default function PartyModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -40,7 +41,7 @@ export default function PartyModal({ isOpen, onClose }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/party/inquiry', {
+      const response = await fetch(`${API_BASE}/party/inquiry`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

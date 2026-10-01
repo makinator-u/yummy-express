@@ -12,8 +12,7 @@ import UserOrdersModal from './components/UserOrdersModal';
 import Footer from './components/Footer';
 import DashboardView from './components/Dashboard/DashboardView';
 import { ArrowRight, RefreshCw, AlertTriangle } from 'lucide-react';
-
-const API_BASE = 'http://localhost:8000/api';
+import { API_BASE } from './config/api';
 
 export default function App() {
   const [restaurant, setRestaurant] = useState(null);
