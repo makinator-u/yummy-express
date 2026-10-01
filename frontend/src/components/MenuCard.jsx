@@ -62,7 +62,7 @@ export default function MenuCard({
         </h4>
 
         {/* Item Description */}
-        <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed line-clamp-2">
+        <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">
           {item.description}
         </p>
       </div>
@@ -70,10 +70,10 @@ export default function MenuCard({
       <div className="mt-4 pt-3.5 border-t border-border/80 space-y-3">
         {/* Portion Selector Tabs */}
         <div>
-          <div className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+          <div className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
             <span>Portion</span>
             {!hasHalfOption && (
-              <span className="text-zinc-500 font-normal lowercase">(full only)</span>
+              <span className="text-gray-400 font-normal lowercase">(full only)</span>
             )}
           </div>
 
@@ -103,10 +103,10 @@ export default function MenuCard({
         {/* Price & Action Row */}
         <div className="flex items-center justify-between pt-1">
           <div>
-            <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold block">
+            <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold block">
               {selectedPortion} Portion
             </span>
-            <div className="text-xl font-bold text-foreground tracking-tight">
+            <div className="text-xl font-bold text-gray-900 tracking-tight">
               ₹{activePrice}
             </div>
           </div>

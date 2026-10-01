@@ -242,16 +242,16 @@ export default function App() {
         {loading && (
           <div className="py-24 text-center space-y-3">
             <div className="w-10 h-10 border-3 border-amber-500/20 border-t-amber-400 rounded-full animate-spin mx-auto" />
-            <p className="text-sm font-semibold text-zinc-300">Loading fresh menu from SQLite database...</p>
+            <p className="text-sm font-semibold text-gray-500">Loading fresh menu from SQLite database...</p>
           </div>
         )}
 
         {/* Error */}
         {error && !loading && (
-          <div className="max-w-xl mx-auto my-12 p-6 rounded-2xl bg-red-950/40 border border-red-500/40 text-center space-y-4">
-            <AlertTriangle className="w-10 h-10 text-red-400 mx-auto" />
-            <h3 className="text-lg font-bold text-white font-heading">Connection Error</h3>
-            <p className="text-xs text-zinc-300">{error}</p>
+          <div className="max-w-xl mx-auto my-12 p-6 rounded-2xl bg-red-50 border border-red-200 text-center space-y-4">
+            <AlertTriangle className="w-10 h-10 text-red-500 mx-auto" />
+            <h3 className="text-lg font-bold text-gray-900 font-heading">Connection Error</h3>
+            <p className="text-xs text-gray-600">{error}</p>
             <button 
               type="button"
               onClick={fetchData} 
@@ -283,8 +283,8 @@ export default function App() {
               {filteredCategories.length === 0 ? (
                 <div className="text-center py-16 space-y-3">
                   <div className="text-4xl">🔍</div>
-                  <h4 className="text-lg font-bold text-white font-heading">No menu dishes found</h4>
-                  <p className="text-xs text-zinc-400">
+                  <h4 className="text-lg font-bold text-gray-800 font-heading">No menu dishes found</h4>
+                  <p className="text-xs text-gray-400">
                     Try clearing your search query or reset your filters.
                   </p>
                   <button
@@ -304,16 +304,16 @@ export default function App() {
                 filteredCategories.map(cat => (
                   <div key={cat.id} className="space-y-4 scroll-mt-48" id={cat.slug}>
                     {/* Category Title Header */}
-                    <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+                    <div className="flex items-center justify-between border-b border-gray-200 pb-3">
                       <div>
-                        <h3 className="text-xl sm:text-2xl font-black text-amber-400 font-heading flex items-center gap-2">
+                        <h3 className="text-xl sm:text-2xl font-black text-amber-600 font-heading flex items-center gap-2">
                           <span>{cat.name}</span>
-                          <span className="text-xs font-semibold text-zinc-400 font-sans">
+                          <span className="text-xs font-semibold text-gray-400 font-sans">
                             ({cat.items.length} items)
                           </span>
                         </h3>
                         {cat.description && (
-                          <p className="text-xs sm:text-[13px] text-zinc-300 mt-1">{cat.description}</p>
+                          <p className="text-xs sm:text-[13px] text-gray-500 mt-1">{cat.description}</p>
                         )}
                       </div>
                     </div>
@@ -343,10 +343,10 @@ export default function App() {
         <div className="fixed bottom-5 inset-x-4 max-w-md mx-auto z-40">
           <div 
             onClick={() => setIsCartOpen(true)}
-            className="px-4 py-3 rounded-xl bg-foreground text-background font-semibold shadow-xl border border-border flex items-center justify-between cursor-pointer hover:opacity-95 active:scale-95 transition"
+            className="px-4 py-3 rounded-xl bg-gray-900 text-white font-semibold shadow-xl border border-gray-800 flex items-center justify-between cursor-pointer hover:opacity-95 active:scale-95 transition"
           >
             <div className="flex items-center gap-3">
-              <span className="bg-primary text-black text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
+              <span className="bg-amber-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
                 {totalCartCount}
               </span>
               <div className="text-xs sm:text-sm">
@@ -356,7 +356,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
               <span>Checkout</span>
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </div>

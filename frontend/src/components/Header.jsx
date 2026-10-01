@@ -1,6 +1,6 @@
 import React from 'react';
 import logoImg from '../assets/logo.jpg';
-import { Phone, ShoppingBag, MapPin, Clock, PartyPopper, Utensils, LogIn } from 'lucide-react';
+import { ShoppingBag, Clock, PartyPopper } from 'lucide-react';
 import UserMenu from './UserMenu';
 
 export default function Header({ 
@@ -16,17 +16,17 @@ export default function Header({
   onOpenMyOrders
 }) {
   return (
-    <header className="sticky top-0 z-50 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80">
-      {/* Top Auspicious Micro-Bar */}
-      <div className="bg-zinc-900/60 border-b border-zinc-800/50 py-1 px-4 text-center">
-        <div className="max-w-6xl mx-auto flex items-center justify-between text-[11px] text-zinc-400">
-          <span className="font-semibold text-amber-400/90 tracking-wide">॥ श्री स्वामी समर्थ ॥</span>
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+      {/* Top Micro-Bar */}
+      <div className="bg-gray-50 border-b border-gray-200 py-1 px-4 text-center">
+        <div className="max-w-6xl mx-auto flex items-center justify-between text-[11px] text-gray-500">
+          <span className="font-semibold text-amber-600 tracking-wide">॥ श्री स्वामी समर्थ ॥</span>
           <div className="hidden sm:flex items-center gap-3">
             <span>📍 Liberty Garden, Malad West</span>
-            <span className="text-zinc-600">•</span>
-            <span className="text-emerald-400 font-medium">Free Home Delivery</span>
+            <span className="text-gray-300">•</span>
+            <span className="text-emerald-600 font-medium">Free Home Delivery</span>
           </div>
-          <a href={`tel:${restaurant?.phone || '7249041603'}`} className="text-zinc-300 hover:text-amber-400 font-medium">
+          <a href={`tel:${restaurant?.phone || '7249041603'}`} className="text-gray-600 hover:text-amber-600 font-medium">
             📞 {restaurant?.phone || '7249041603'}
           </a>
         </div>
@@ -38,7 +38,7 @@ export default function Header({
           className="flex items-center gap-2.5 cursor-pointer group" 
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
-          <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 border border-zinc-700 bg-zinc-900">
+          <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 border border-gray-200 bg-gray-100">
             <img
               src={logoImg}
               alt="Yummy Express"
@@ -46,11 +46,11 @@ export default function Header({
             />
           </div>
           <div>
-            <div className="text-base sm:text-lg font-bold tracking-tight text-white font-heading flex items-center gap-1.5">
+            <div className="text-base sm:text-lg font-bold tracking-tight text-gray-900 font-heading flex items-center gap-1.5">
               <span>YUMMY</span>
-              <span className="text-amber-400 font-normal">EXPRESS</span>
+              <span className="text-amber-600 font-normal">EXPRESS</span>
             </div>
-            <p className="text-[10px] text-zinc-500 font-medium -mt-0.5">
+            <p className="text-[10px] text-gray-400 font-medium -mt-0.5">
               Indo-Chinese Wok • Open {restaurant?.timing || '7:30 PM - 11:30 PM'}
             </p>
           </div>
@@ -62,9 +62,9 @@ export default function Header({
           <button 
             type="button"
             onClick={onOpenPartyModal}
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-700 transition"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 transition"
           >
-            <PartyPopper className="w-3.5 h-3.5 text-amber-400" />
+            <PartyPopper className="w-3.5 h-3.5 text-amber-600" />
             <span>Party Catering</span>
           </button>
 
@@ -72,9 +72,9 @@ export default function Header({
           <button 
             type="button"
             onClick={onOpenTrackModal}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-700 transition"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 transition"
           >
-            <Clock className="w-3.5 h-3.5 text-zinc-400" />
+            <Clock className="w-3.5 h-3.5 text-gray-400" />
             <span>Track</span>
           </button>
 
@@ -82,7 +82,7 @@ export default function Header({
           <button 
             type="button"
             onClick={onOpenDashboard}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-200 bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-800/80 transition"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition"
             title="Kitchen Dashboard"
           >
             <span>👨‍🍳</span>
@@ -101,7 +101,7 @@ export default function Header({
             <button
               type="button"
               onClick={onOpenAuthModal}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-200 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 transition"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 transition"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -123,7 +123,7 @@ export default function Header({
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>Cart</span>
             {cartCount > 0 && (
-              <span className="bg-zinc-950 text-amber-300 text-[10px] font-black px-1.5 py-0.2 rounded-full">
+              <span className="bg-white/25 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">
                 {cartCount}
               </span>
             )}
@@ -133,4 +133,3 @@ export default function Header({
     </header>
   );
 }
-

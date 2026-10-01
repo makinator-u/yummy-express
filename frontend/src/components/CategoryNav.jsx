@@ -14,14 +14,14 @@ export default function CategoryNav({
   totalItemsCount
 }) {
   return (
-    <div className="sticky top-[69px] z-30 bg-background/90 backdrop-blur-md border-b border-border py-3">
+    <div className="sticky top-[69px] z-30 bg-white/90 backdrop-blur-md border-b border-gray-200 py-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
         
         {/* Search Bar & Quick Filter Chips */}
         <div className="flex flex-col sm:flex-row items-center gap-3 justify-between">
           {/* Search Box */}
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input 
               type="text"
               placeholder="Search dishes (e.g. Manchurian, Hakka, Schezwan)..."
@@ -33,7 +33,7 @@ export default function CategoryNav({
               <button 
                 type="button"
                 onClick={() => onSearchChange('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-1"
                 aria-label="Clear search"
               >
                 <X className="w-4 h-4" />
@@ -48,8 +48,8 @@ export default function CategoryNav({
               onClick={onToggleBestsellers}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition border ${
                 showBestsellersOnly
-                  ? 'bg-primary text-black border-primary font-bold'
-                  : 'bg-surface text-zinc-300 border-border hover:bg-surface-elevated hover:text-white'
+                  ? 'bg-amber-600 text-white border-amber-600 font-bold'
+                  : 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200 hover:text-gray-800'
               }`}
             >
               <Star className="w-3.5 h-3.5 fill-current" />
@@ -62,7 +62,7 @@ export default function CategoryNav({
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition border ${
                 showSpicyOnly
                   ? 'bg-red-500 text-white border-red-500 font-bold'
-                  : 'bg-surface text-zinc-300 border-border hover:bg-surface-elevated hover:text-white'
+                  : 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200 hover:text-gray-800'
               }`}
             >
               <Flame className="w-3.5 h-3.5 fill-current" />
@@ -78,8 +78,8 @@ export default function CategoryNav({
             onClick={() => onSelectCategory(null)}
             className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition border ${
               selectedCategory === null
-                ? 'bg-foreground text-background border-foreground font-semibold'
-                : 'bg-surface text-zinc-400 border-border hover:text-foreground hover:bg-surface-elevated'
+                ? 'bg-gray-900 text-white border-gray-900 font-semibold'
+                : 'bg-gray-100 text-gray-500 border-gray-200 hover:text-gray-900 hover:bg-gray-200'
             }`}
           >
             All Items ({totalItemsCount})
@@ -94,8 +94,8 @@ export default function CategoryNav({
                 onClick={() => onSelectCategory(cat.slug)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition border ${
                   isSelected
-                    ? 'bg-foreground text-background border-foreground font-semibold'
-                    : 'bg-surface text-zinc-400 border-border hover:text-foreground hover:bg-surface-elevated'
+                    ? 'bg-gray-900 text-white border-gray-900 font-semibold'
+                    : 'bg-gray-100 text-gray-500 border-gray-200 hover:text-gray-900 hover:bg-gray-200'
                 }`}
               >
                 {cat.name} ({cat.items ? cat.items.length : 0})
