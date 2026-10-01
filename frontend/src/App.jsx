@@ -7,11 +7,9 @@ import CartDrawer from './components/CartDrawer';
 import CheckoutModal from './components/CheckoutModal';
 import PartyModal from './components/PartyModal';
 import OrderTrackerModal from './components/OrderTrackerModal';
-import GoogleAuthModal from './components/GoogleAuthModal';
-import UserOrdersModal from './components/UserOrdersModal';
 import Footer from './components/Footer';
 import DashboardView from './components/Dashboard/DashboardView';
-import { ArrowRight, RefreshCw, AlertTriangle } from 'lucide-react';
+import { ArrowRight, RefreshCw, AlertTriangle, Search } from 'lucide-react';
 import { API_BASE } from './config/api';
 
 export default function App() {
@@ -19,20 +17,6 @@ export default function App() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Auth state from localStorage
-  const [user, setUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ye_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  const [authToken, setAuthToken] = useState(() => {
-    return localStorage.getItem('ye_auth_token') || '';
-  });
 
   // View state: 'store' or 'dashboard'
   const [currentView, setCurrentView] = useState('store');
@@ -58,39 +42,9 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isPartyModalOpen, setIsPartyModalOpen] = useState(false);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isMyOrdersOpen, setIsMyOrdersOpen] = useState(false);
   const [initialTrackNumber, setInitialTrackNumber] = useState('');
 
-  // Auth Handlers
-  const handleAuthSuccess = (authData) => {
-    setUser(authData.user);
-    setAuthToken(authData.token);
-    try {
-      localStorage.setItem('ye_user', JSON.stringify(authData.user));
-      localStorage.setItem('ye_auth_token', authData.token);
-    } catch (e) {
-      console.error('Failed to save user session', e);
-    }
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setAuthToken('');
-    try {
-      localStorage.removeItem('ye_user');
-      localStorage.removeItem('ye_auth_token');
-    } catch (e) {
-      console.error('Failed to clear user session', e);
-    }
-  };
-
-  const handleTrackFromOrders = (orderNumber) => {
-    setInitialTrackNumber(orderNumber);
-    setIsTrackModalOpen(true);
-  };
-
-  // Sync to local storage
+  // Sync cart to local storage
   useEffect(() => {
     try {
       localStorage.setItem('ye_cart', JSON.stringify(cartItems));
@@ -173,7 +127,7 @@ export default function App() {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       items = items.filter(
-        item => item.name.toLowerCase().includes(q) || item.description.toLowerCase().includes(q)
+        item => item.name.toLowerCase().includes(q) || (item.description && item.description.toLowerCase().includes(q))
       );
     }
 
@@ -212,7 +166,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+    <div className="min-h-screen flex flex-col selection:bg-amber-500 selection:text-white bg-slate-50">
       {/* Header */}
       <Header
         restaurant={restaurant}
@@ -224,10 +178,6 @@ export default function App() {
           setIsTrackModalOpen(true);
         }}
         onOpenDashboard={() => setCurrentView('dashboard')}
-        user={user}
-        onOpenAuthModal={() => setIsAuthModalOpen(true)}
-        onLogout={handleLogout}
-        onOpenMyOrders={() => setIsMyOrdersOpen(true)}
       />
 
       {/* Main Content */}
@@ -240,17 +190,17 @@ export default function App() {
         {/* Loading */}
         {loading && (
           <div className="py-24 text-center space-y-3">
-            <div className="w-10 h-10 border-3 border-amber-500/20 border-t-amber-400 rounded-full animate-spin mx-auto" />
-            <p className="text-sm font-semibold text-gray-500">Loading fresh menu from SQLite database...</p>
+            <div className="w-10 h-10 border-3 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mx-auto" />
+            <p className="text-sm font-bold text-slate-600">Loading fresh menu from database...</p>
           </div>
         )}
 
         {/* Error */}
         {error && !loading && (
           <div className="max-w-xl mx-auto my-12 p-6 rounded-2xl bg-red-50 border border-red-200 text-center space-y-4">
-            <AlertTriangle className="w-10 h-10 text-red-500 mx-auto" />
-            <h3 className="text-lg font-bold text-gray-900 font-heading">Connection Error</h3>
-            <p className="text-xs text-gray-600">{error}</p>
+            <AlertTriangle className="w-10 h-10 text-red-600 mx-auto" />
+            <h3 className="text-lg font-bold text-slate-900 font-heading">Connection Error</h3>
+            <p className="text-xs sm:text-sm text-slate-600">{error}</p>
             <button 
               type="button"
               onClick={fetchData} 
@@ -264,7 +214,7 @@ export default function App() {
 
         {/* Menu Section */}
         {!loading && !error && (
-          <section id="menu-section" className="scroll-mt-36">
+          <section id="menu-section" className="scroll-mt-36 pb-16">
             <CategoryNav
               categories={categories}
               selectedCategory={selectedCategory}
@@ -280,11 +230,13 @@ export default function App() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
               {filteredCategories.length === 0 ? (
-                <div className="text-center py-16 space-y-3">
-                  <div className="text-4xl">🔍</div>
-                  <h4 className="text-lg font-bold text-gray-800 font-heading">No menu dishes found</h4>
-                  <p className="text-xs text-gray-400">
-                    Try clearing your search query or reset your filters.
+                <div className="text-center py-16 space-y-3 bg-white rounded-2xl border border-slate-200 p-8 shadow-xs max-w-lg mx-auto">
+                  <div className="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto text-2xl">
+                    🔍
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 font-heading">No matching dishes found</h4>
+                  <p className="text-xs sm:text-sm text-slate-500 max-w-xs mx-auto">
+                    Try clearing your search keyword or reset the spicy/popular filters.
                   </p>
                   <button
                     type="button"
@@ -303,22 +255,22 @@ export default function App() {
                 filteredCategories.map(cat => (
                   <div key={cat.id} className="space-y-4 scroll-mt-48" id={cat.slug}>
                     {/* Category Title Header */}
-                    <div className="flex items-center justify-between border-b border-gray-200 pb-3">
+                    <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                       <div>
-                        <h3 className="text-xl sm:text-2xl font-black text-amber-600 font-heading flex items-center gap-2">
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-heading flex items-center gap-2.5">
                           <span>{cat.name}</span>
-                          <span className="text-xs font-semibold text-gray-400 font-sans">
-                            ({cat.items.length} items)
+                          <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200 font-sans">
+                            {cat.items.length} {cat.items.length === 1 ? 'dish' : 'dishes'}
                           </span>
                         </h3>
                         {cat.description && (
-                          <p className="text-xs sm:text-[13px] text-gray-500 mt-1">{cat.description}</p>
+                          <p className="text-xs sm:text-[13px] text-slate-600 mt-1 font-medium">{cat.description}</p>
                         )}
                       </div>
                     </div>
 
                     {/* Cards Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                       {cat.items.map(item => (
                         <MenuCard
                           key={item.id}
@@ -337,27 +289,27 @@ export default function App() {
         )}
       </main>
 
-      {/* Floating Bottom Cart Bar - Minimalist */}
+      {/* Floating Bottom Cart Bar */}
       {totalCartCount > 0 && !isCartOpen && (
         <div className="fixed bottom-5 inset-x-4 max-w-md mx-auto z-40">
           <div 
             onClick={() => setIsCartOpen(true)}
-            className="px-4 py-3 rounded-xl bg-gray-900 text-white font-semibold shadow-xl border border-gray-800 flex items-center justify-between cursor-pointer hover:opacity-95 active:scale-95 transition"
+            className="px-5 py-3.5 rounded-2xl bg-slate-900 text-white font-bold shadow-2xl border border-slate-700 flex items-center justify-between cursor-pointer hover:bg-slate-800 active:scale-98 transition"
           >
             <div className="flex items-center gap-3">
-              <span className="bg-amber-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
+              <span className="bg-amber-500 text-slate-950 text-xs font-black w-6 h-6 rounded-full flex items-center justify-center shadow-xs">
                 {totalCartCount}
               </span>
               <div className="text-xs sm:text-sm">
                 <span>View Basket</span>
-                <span className="mx-2 opacity-40">/</span>
-                <span className="font-bold">₹{cartSubtotal}</span>
+                <span className="mx-2 text-slate-500">/</span>
+                <span className="font-extrabold text-amber-400">₹{cartSubtotal}</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
+            <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-400">
               <span>Checkout</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+              <ArrowRight className="w-4 h-4 stroke-[3]" />
             </div>
           </div>
         </div>
@@ -378,16 +330,13 @@ export default function App() {
         onClose={() => setIsCheckoutOpen(false)}
         cartItems={cartItems}
         onOrderPlaced={() => setCartItems([])}
-        user={user}
-        onOpenAuthModal={() => {
-          setIsCheckoutOpen(false);
-          setIsAuthModalOpen(true);
-        }}
+        restaurant={restaurant}
       />
 
       <PartyModal
         isOpen={isPartyModalOpen}
         onClose={() => setIsPartyModalOpen(false)}
+        restaurant={restaurant}
       />
 
       <OrderTrackerModal
@@ -397,20 +346,7 @@ export default function App() {
           setInitialTrackNumber('');
         }}
         initialOrderNumber={initialTrackNumber}
-      />
-
-      <GoogleAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onAuthSuccess={handleAuthSuccess}
-      />
-
-      <UserOrdersModal
-        isOpen={isMyOrdersOpen}
-        onClose={() => setIsMyOrdersOpen(false)}
-        token={authToken}
-        user={user}
-        onTrackOrder={handleTrackFromOrders}
+        restaurant={restaurant}
       />
 
       <Footer

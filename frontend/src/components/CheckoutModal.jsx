@@ -8,11 +8,10 @@ export default function CheckoutModal({
   onClose,
   cartItems,
   onOrderPlaced,
-  user,
-  onOpenAuthModal
+  restaurant
 }) {
   const [formData, setFormData] = useState({
-    customer_name: user?.name || '',
+    customer_name: '',
     customer_phone: '',
     delivery_address: '',
     delivery_notes: '',
@@ -20,19 +19,14 @@ export default function CheckoutModal({
     payment_method: 'Cash on Delivery'
   });
 
-  // Sync with user change if logged in
-  React.useEffect(() => {
-    if (user?.name && !formData.customer_name) {
-      setFormData(prev => ({ ...prev, customer_name: user.name }));
-    }
-  }, [user]);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [placedOrder, setPlacedOrder] = useState(null);
 
   if (!isOpen) return null;
 
+  const phone = restaurant?.phone || '7249041603';
+  const rawPhone = phone.replace(/\D/g, '');
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const deliveryFee = 0;
   const total = subtotal + deliveryFee;
@@ -61,7 +55,6 @@ export default function CheckoutModal({
 
     try {
       const orderPayload = {
-        user_id: user?.id || null,
         customer_name: formData.customer_name.trim(),
         customer_phone: cleanPhone,
         delivery_address: formData.order_type === 'Delivery' ? formData.delivery_address.trim() : 'Takeaway / Self-Pickup from Counter (Liberty Garden)',
@@ -95,7 +88,7 @@ export default function CheckoutModal({
       // Confetti celebration
       try {
         confetti({
-          particleCount: 90,
+          particleCount: 100,
           spread: 80,
           origin: { y: 0.6 }
         });
@@ -116,29 +109,29 @@ export default function CheckoutModal({
       .map(it => `• ${it.item_name} (${it.portion}) x ${it.quantity} = ₹${it.total_price}`)
       .join('%0A');
     
-    const message = `*YUMMY EXPRESS ORDER - ${placedOrder.order_number}*%0A%0A*Customer:* ${placedOrder.customer_name}%0A*Phone:* ${placedOrder.customer_phone}%0A*Type:* ${placedOrder.order_type}%0A*Address:* ${placedOrder.delivery_address}%0A${placedOrder.delivery_notes ? `*Notes:* ${placedOrder.delivery_notes}%0A` : ''}%0A*Items Ordered:*%0A${itemsText}%0A%0A*Total Amount:* ₹${placedOrder.total_amount}%0A*Payment:* ${placedOrder.payment_method}%0A%0APlease confirm my order!`;
+    const message = `*${restaurant?.name || 'YUMMY EXPRESS'} ORDER - ${placedOrder.order_number}*%0A%0A*Customer:* ${placedOrder.customer_name}%0A*Phone:* ${placedOrder.customer_phone}%0A*Type:* ${placedOrder.order_type}%0A*Address:* ${placedOrder.delivery_address}%0A${placedOrder.delivery_notes ? `*Notes:* ${placedOrder.delivery_notes}%0A` : ''}%0A*Items Ordered:*%0A${itemsText}%0A%0A*Total Amount:* ₹${placedOrder.total_amount}%0A*Payment:* ${placedOrder.payment_method}%0A%0APlease confirm my order!`;
     
-    window.open(`https://wa.me/917249041603?text=${message}`, '_blank');
+    window.open(`https://wa.me/91${rawPhone}?text=${message}`, '_blank');
   };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div 
-        className="relative w-full max-w-lg bg-zinc-950 border border-amber-500/40 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/90">
+        <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2">
             <span className="text-xl">🥡</span>
-            <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-              {placedOrder ? 'Order Confirmed!' : 'Checkout & Confirm Details'}
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading">
+              {placedOrder ? 'Order Confirmed!' : 'Checkout & Order Details'}
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-white rounded-lg transition"
+            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -149,34 +142,36 @@ export default function CheckoutModal({
         <div className="p-5 overflow-y-auto flex-1 space-y-4">
           {placedOrder ? (
             /* Order Success Screen */
-            <div className="text-center py-3 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-9 h-9" />
+            <div className="text-center py-4 space-y-4">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 border-2 border-emerald-400 text-emerald-700 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
               </div>
 
               <div>
-                <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Order ID</span>
-                <div className="text-2xl sm:text-3xl font-black text-amber-400 font-heading tracking-wider mt-0.5">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Order ID</span>
+                <div className="text-2xl sm:text-3xl font-black text-amber-700 font-heading tracking-wider mt-0.5">
                   {placedOrder.order_number}
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-left space-y-2.5 text-xs sm:text-[13px] text-zinc-200">
-                <div className="flex justify-between border-b border-zinc-800 pb-2">
-                  <span className="text-zinc-400">Order Status:</span>
-                  <span className="font-extrabold text-emerald-400">{placedOrder.status}</span>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-left space-y-2.5 text-xs sm:text-[13px] text-slate-700">
+                <div className="flex justify-between border-b border-slate-200 pb-2">
+                  <span className="text-slate-500 font-medium">Order Status:</span>
+                  <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    {placedOrder.status}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-400">Customer:</span>
-                  <span className="font-bold text-white">{placedOrder.customer_name} ({placedOrder.customer_phone})</span>
+                  <span className="text-slate-500 font-medium">Customer:</span>
+                  <span className="font-bold text-slate-900">{placedOrder.customer_name} ({placedOrder.customer_phone})</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-400">Total Payable:</span>
-                  <span className="font-black text-amber-400">₹{placedOrder.total_amount} ({placedOrder.payment_method})</span>
+                  <span className="text-slate-500 font-medium">Total Amount:</span>
+                  <span className="font-black text-slate-900">₹{placedOrder.total_amount} ({placedOrder.payment_method})</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-400">Delivery Address:</span>
-                  <span className="font-medium text-right max-w-[220px] truncate text-white">{placedOrder.delivery_address}</span>
+                  <span className="text-slate-500 font-medium">Delivery Address:</span>
+                  <span className="font-semibold text-right max-w-[220px] truncate text-slate-900">{placedOrder.delivery_address}</span>
                 </div>
               </div>
 
@@ -184,10 +179,10 @@ export default function CheckoutModal({
                 <button
                   type="button"
                   onClick={handleWhatsAppSend}
-                  className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 transition shadow-lg flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 transition shadow-md flex items-center justify-center gap-2"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Send Order to WhatsApp (7249041603)</span>
+                  <Send className="w-4 h-4 stroke-[2.5]" />
+                  <span>Send Order to WhatsApp ({phone})</span>
                 </button>
 
                 <button
@@ -203,81 +198,49 @@ export default function CheckoutModal({
             /* Checkout Form */
             <form onSubmit={handleSubmit} className="space-y-3.5">
               {error && (
-                <div className="p-3 rounded-xl bg-red-950/50 border border-red-500/40 text-red-300 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
                   <span>{error}</span>
                 </div>
               )}
 
               {/* Order Type Toggle */}
               <div>
-                <label className="text-xs font-bold text-zinc-300 block mb-1.5">Delivery or Takeaway *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5">Order Type *</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, order_type: 'Delivery' })}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-2 ${
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-2 ${
                       formData.order_type === 'Delivery'
-                        ? 'bg-amber-500/20 border-amber-400 text-amber-300'
-                        : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800'
+                        ? 'bg-amber-50 border-amber-500 text-amber-900 shadow-xs'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    <Truck className="w-3.5 h-3.5 text-emerald-400" />
+                    <Truck className="w-4 h-4 text-emerald-600" />
                     <span>Free Home Delivery</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, order_type: 'Takeaway' })}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-2 ${
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-2 ${
                       formData.order_type === 'Takeaway'
-                        ? 'bg-amber-500/20 border-amber-400 text-amber-300'
-                        : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800'
+                        ? 'bg-amber-50 border-amber-500 text-amber-900 shadow-xs'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    <ShoppingBag className="w-3.5 h-3.5 text-amber-400" />
+                    <ShoppingBag className="w-4 h-4 text-amber-600" />
                     <span>Self Pickup (Counter)</span>
                   </button>
                 </div>
               </div>
 
-              {/* Google Account Status / Quick Fill */}
-              {user ? (
-                <div className="flex items-center justify-between p-2.5 bg-zinc-900/90 border border-amber-500/30 rounded-xl text-xs">
-                  <div className="flex items-center gap-2">
-                    {user.picture ? (
-                      <img src={user.picture} alt={user.name} className="w-5 h-5 rounded-full object-cover ring-1 ring-amber-400" />
-                    ) : (
-                      <div className="w-5 h-5 rounded-full bg-amber-500 text-zinc-950 text-[10px] font-bold flex items-center justify-center">
-                        {user.name?.[0] || 'U'}
-                      </div>
-                    )}
-                    <span className="text-zinc-300">Ordering as <strong className="text-white">{user.name}</strong></span>
-                  </div>
-                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                    Google Account
-                  </span>
-                </div>
-              ) : onOpenAuthModal ? (
-                <div className="flex items-center justify-between p-2.5 bg-zinc-900/80 border border-zinc-800 rounded-xl text-xs">
-                  <span className="text-zinc-400">Have a Google account?</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onOpenAuthModal();
-                    }}
-                    className="text-amber-400 font-bold hover:underline inline-flex items-center gap-1 text-[11px]"
-                  >
-                    Sign in with Google →
-                  </button>
-                </div>
-              ) : null}
-
               {/* Customer Name */}
               <div>
-                <label className="text-xs font-bold text-zinc-300 block mb-1">Your Full Name *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Your Full Name *</label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     required
@@ -291,9 +254,9 @@ export default function CheckoutModal({
 
               {/* Contact Phone */}
               <div>
-                <label className="text-xs font-bold text-zinc-300 block mb-1">Mobile Phone Number *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Mobile Phone Number *</label>
                 <div className="relative">
-                  <Phone className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="tel"
                     required
@@ -309,9 +272,9 @@ export default function CheckoutModal({
               {/* Delivery Address */}
               {formData.order_type === 'Delivery' && (
                 <div>
-                  <label className="text-xs font-bold text-zinc-300 block mb-1">Delivery Address in Malad West *</label>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Delivery Address in Malad West *</label>
                   <div className="relative">
-                    <MapPin className="w-4 h-4 text-zinc-500 absolute left-3.5 top-3" />
+                    <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <textarea
                       required
                       rows={2}
@@ -326,7 +289,7 @@ export default function CheckoutModal({
 
               {/* Special Cooking Notes */}
               <div>
-                <label className="text-xs font-bold text-zinc-300 block mb-1">Cooking / Delivery Instructions (Optional)</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Cooking / Delivery Instructions (Optional)</label>
                 <input
                   type="text"
                   placeholder="e.g. Less oil, extra spicy, extra fried noodles..."
@@ -338,12 +301,12 @@ export default function CheckoutModal({
 
               {/* Payment Method */}
               <div>
-                <label className="text-xs font-bold text-zinc-300 block mb-1.5">Payment Method *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5">Payment Method *</label>
                 <div className="grid grid-cols-2 gap-2">
                   <label className={`p-3 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
                     formData.payment_method === 'Cash on Delivery'
-                      ? 'bg-amber-500/10 border-amber-500 text-white font-bold'
-                      : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                      ? 'bg-amber-50 border-amber-500 text-slate-900 font-bold'
+                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                   }`}>
                     <input
                       type="radio"
@@ -351,15 +314,15 @@ export default function CheckoutModal({
                       value="Cash on Delivery"
                       checked={formData.payment_method === 'Cash on Delivery'}
                       onChange={() => setFormData({ ...formData, payment_method: 'Cash on Delivery' })}
-                      className="accent-amber-500"
+                      className="accent-amber-600"
                     />
                     <span className="text-xs">💵 Cash on Delivery</span>
                   </label>
 
                   <label className={`p-3 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
                     formData.payment_method === 'UPI QR on Delivery'
-                      ? 'bg-amber-500/10 border-amber-500 text-white font-bold'
-                      : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                      ? 'bg-amber-50 border-amber-500 text-slate-900 font-bold'
+                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                   }`}>
                     <input
                       type="radio"
@@ -367,7 +330,7 @@ export default function CheckoutModal({
                       value="UPI QR on Delivery"
                       checked={formData.payment_method === 'UPI QR on Delivery'}
                       onChange={() => setFormData({ ...formData, payment_method: 'UPI QR on Delivery' })}
-                      className="accent-amber-500"
+                      className="accent-amber-600"
                     />
                     <span className="text-xs">📱 UPI / QR Scanner</span>
                   </label>
@@ -375,19 +338,21 @@ export default function CheckoutModal({
               </div>
 
               {/* Order Total Line */}
-              <div className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 flex justify-between items-center text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex justify-between items-center text-xs">
                 <div>
-                  <span className="text-zinc-400">Total Payable:</span>
-                  <span className="text-base font-black text-amber-400 ml-2 font-heading">₹{total}</span>
+                  <span className="text-slate-600 font-medium">Total Payable:</span>
+                  <span className="text-base font-black text-amber-700 ml-2 font-heading">₹{total}</span>
                 </div>
-                <span className="text-emerald-400 font-bold">Free Fast Delivery</span>
+                <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  Free Fast Delivery
+                </span>
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full btn-primary py-3.5 text-sm rounded-xl font-bold flex items-center justify-center gap-2"
+                className="w-full btn-primary py-3.5 text-sm rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
               >
                 {loading ? (
                   <span>Placing Order...</span>

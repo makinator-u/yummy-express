@@ -33,7 +33,7 @@ export default function MenuCard({
   return (
     <div className="food-card flex flex-col justify-between">
       <div>
-        {/* Top Indicators */}
+        {/* Top Indicators Row */}
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-2">
             <span className="veg-badge" title="100% Pure Vegetarian">
@@ -42,7 +42,7 @@ export default function MenuCard({
 
             {item.is_spicy && (
               <span className="spicy-badge">
-                <Flame className="w-3 h-3 text-red-400 fill-current" />
+                <Flame className="w-3.5 h-3.5 text-red-600 fill-current" />
                 <span>SPICY</span>
               </span>
             )}
@@ -50,30 +50,32 @@ export default function MenuCard({
 
           {item.is_bestseller && (
             <span className="bestseller-badge">
-              <Star className="w-3 h-3 fill-amber-300 text-amber-300" />
+              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
               <span>POPULAR</span>
             </span>
           )}
         </div>
 
-        {/* Item Title */}
-        <h4 className="text-base font-bold text-foreground leading-snug">
+        {/* Dish Title */}
+        <h4 className="text-base sm:text-[17px] font-bold text-slate-900 leading-snug">
           {item.name}
         </h4>
 
-        {/* Item Description */}
-        <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">
-          {item.description}
-        </p>
+        {/* Dish Description */}
+        {item.description && (
+          <p className="text-xs sm:text-[13px] text-slate-600 mt-1.5 leading-relaxed">
+            {item.description}
+          </p>
+        )}
       </div>
 
-      <div className="mt-4 pt-3.5 border-t border-border/80 space-y-3">
-        {/* Portion Selector Tabs */}
+      <div className="mt-4 pt-3.5 border-t border-slate-100 space-y-3">
+        {/* Portion Selector */}
         <div>
-          <div className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-            <span>Portion</span>
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+            <span>Choose Portion</span>
             {!hasHalfOption && (
-              <span className="text-gray-400 font-normal lowercase">(full only)</span>
+              <span className="text-slate-400 font-medium normal-case">(full only)</span>
             )}
           </div>
 
@@ -85,7 +87,7 @@ export default function MenuCard({
                 className={`portion-toggle-btn ${selectedPortion === 'Half' ? 'active' : ''}`}
               >
                 <span>Half</span>
-                <span className="font-semibold opacity-90">₹{item.half_price}</span>
+                <span className="font-extrabold text-amber-700">₹{item.half_price}</span>
               </button>
             )}
 
@@ -95,7 +97,7 @@ export default function MenuCard({
               className={`portion-toggle-btn ${selectedPortion === 'Full' ? 'active' : ''}`}
             >
               <span>Full</span>
-              <span className="font-semibold opacity-90">₹{item.full_price}</span>
+              <span className="font-extrabold text-amber-700">₹{item.full_price}</span>
             </button>
           </div>
         </div>
@@ -103,10 +105,10 @@ export default function MenuCard({
         {/* Price & Action Row */}
         <div className="flex items-center justify-between pt-1">
           <div>
-            <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold block">
+            <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold block">
               {selectedPortion} Portion
             </span>
-            <div className="text-xl font-bold text-gray-900 tracking-tight">
+            <div className="text-xl font-extrabold text-slate-900 tracking-tight">
               ₹{activePrice}
             </div>
           </div>
@@ -116,9 +118,9 @@ export default function MenuCard({
             <button
               type="button"
               onClick={handleAdd}
-              className="btn-primary text-xs py-1.5 px-3.5 rounded-lg flex items-center gap-1.5"
+              className="btn-primary text-xs sm:text-sm py-1.5 px-4 rounded-xl flex items-center gap-1.5 shadow-sm hover:shadow"
             >
-              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>Add</span>
             </button>
           ) : (
@@ -129,7 +131,7 @@ export default function MenuCard({
                 className="qty-btn"
                 aria-label="Decrease quantity"
               >
-                <Minus className="w-3.5 h-3.5" />
+                <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
               </button>
               <span className="qty-val">{currentQuantity}</span>
               <button
@@ -138,7 +140,7 @@ export default function MenuCard({
                 className="qty-btn"
                 aria-label="Increase quantity"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
               </button>
             </div>
           )}

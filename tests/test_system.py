@@ -2,7 +2,7 @@ import urllib.request
 import json
 
 def test_full_system():
-    print("=== TESTING YUMMY EXPRESS FASTAPI & SQLITE SYSTEM ===")
+    print("=== TESTING YUMMY EXPRESS FASTAPI SYSTEM ===")
     
     # 0. Health check
     req = urllib.request.urlopen("http://127.0.0.1:8000/health")
@@ -22,11 +22,11 @@ def test_full_system():
     cats = json.loads(req.read().decode())
     print(f"✅ Categories loaded: {len(cats)} categories")
     total_items = sum(len(c["items"]) for c in cats)
-    print(f"✅ Total menu items in SQLite: {total_items}")
+    print(f"✅ Total menu items in database: {total_items}")
     assert len(cats) == 4
     assert total_items >= 60
 
-    # 3. Test Order Placement
+    # 3. Test Direct Guest Order Placement
     order_data = {
         "customer_name": "Pooja Mehta",
         "customer_phone": "9820198201",
@@ -92,23 +92,7 @@ def test_full_system():
     print(f"✅ Order Status Updated: {status_res['status']}")
     assert status_res["status"] == "Preparing in Wok"
 
-    # 8. Test Google Auth Sign In
-    auth_data = {
-        "email": "testuser@gmail.com",
-        "name": "Test Customer",
-        "picture": "https://lh3.googleusercontent.com/a/default-user"
-    }
-    auth_req = urllib.request.Request(
-        "http://127.0.0.1:8000/api/auth/google",
-        data=json.dumps(auth_data).encode("utf-8"),
-        headers={"Content-Type": "application/json"}
-    )
-    auth_res = json.loads(urllib.request.urlopen(auth_req).read().decode())
-    print(f"✅ Google Auth API Verified: User {auth_res['user']['name']} ({auth_res['user']['email']}) | Token: {auth_res['token'][:16]}...")
-    assert auth_res["user"]["email"] == "testuser@gmail.com"
-    assert auth_res["token"].startswith("ye_")
-
-    print("\n🎉 ALL BACKEND, SQLITE DATABASE, VALIDATION, AUTH AND DASHBOARD TESTS PASSED 100%!")
+    print("\n🎉 ALL BACKEND, DATABASE, VALIDATION AND DASHBOARD TESTS PASSED 100%!")
 
 if __name__ == "__main__":
     test_full_system()

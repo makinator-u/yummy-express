@@ -4,4 +4,3 @@ sqlalchemy>=2.0.0
 sqlalchemy-libsql>=0.1.0
 pydantic>=2.6.0
 python-multipart>=0.0.9
-
