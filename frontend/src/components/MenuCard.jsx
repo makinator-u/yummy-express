@@ -1,0 +1,150 @@
+import React, { useState } from 'react';
+import { Flame, Star, Plus, Minus, Check } from 'lucide-react';
+
+export default function MenuCard({ 
+  item, 
+  cartItems, 
+  onAddToCart, 
+  onUpdateQuantity 
+}) {
+  const hasHalfOption = item.half_price !== null;
+  
+  // Default portion to 'Half' if available, otherwise 'Full'
+  const [selectedPortion, setSelectedPortion] = useState(
+    hasHalfOption ? 'Half' : 'Full'
+  );
+
+  const activePrice = selectedPortion === 'Half' ? item.half_price : item.full_price;
+
+  // Check if current item with this specific portion is in cart
+  const cartItem = cartItems.find(ci => ci.id === item.id && ci.portion === selectedPortion);
+  const currentQuantity = cartItem ? cartItem.quantity : 0;
+
+  const handleAdd = () => {
+    onAddToCart({
+      id: item.id,
+      name: item.name,
+      portion: selectedPortion,
+      price: activePrice,
+      is_veg: item.is_veg
+    });
+  };
+
+  return (
+    <div className="food-card">
+      <div>
+        {/* Top Header: Veg mark & Badges */}
+        <div className="flex items-center justify-between gap-2 mb-2.5">
+          <div className="flex items-center gap-2">
+            <span className="veg-badge" title="100% Pure Vegetarian">
+              <span className="veg-dot" />
+            </span>
+
+            {item.is_spicy && (
+              <span className="spicy-badge">
+                <Flame className="w-3 h-3 text-red-400 fill-current" />
+                <span>SPICY</span>
+              </span>
+            )}
+          </div>
+
+          {item.is_bestseller && (
+            <span className="bestseller-badge">
+              <Star className="w-3 h-3 fill-amber-300 text-amber-300" />
+              <span>POPULAR</span>
+            </span>
+          )}
+        </div>
+
+        {/* Item Title */}
+        <h4 className="text-base sm:text-lg font-bold text-white leading-snug font-heading">
+          {item.name}
+        </h4>
+
+        {/* Item Description */}
+        <p className="text-xs sm:text-[13px] text-zinc-300 mt-1.5 leading-relaxed line-clamp-2">
+          {item.description}
+        </p>
+      </div>
+
+      <div className="mt-4 pt-3.5 border-t border-zinc-800/80 space-y-3">
+        {/* Portion Selector Tabs */}
+        <div>
+          <div className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+            <span>Select Portion:</span>
+            {!hasHalfOption && (
+              <span className="text-amber-400/90 font-medium lowercase">(full portion only)</span>
+            )}
+          </div>
+
+          <div className={`portion-toggle-group ${!hasHalfOption ? 'single-item' : ''}`}>
+            {hasHalfOption && (
+              <button
+                type="button"
+                onClick={() => setSelectedPortion('Half')}
+                className={`portion-toggle-btn ${selectedPortion === 'Half' ? 'active' : ''}`}
+              >
+                <span>Half Portion</span>
+                <span className="font-extrabold opacity-95">• ₹{item.half_price}</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setSelectedPortion('Full')}
+              className={`portion-toggle-btn ${selectedPortion === 'Full' ? 'active' : ''}`}
+            >
+              <span>Full Portion</span>
+              <span className="font-extrabold opacity-95">• ₹{item.full_price}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Price & Action Row */}
+        <div className="flex items-center justify-between pt-1">
+          <div>
+            <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold block">
+              Total ({selectedPortion})
+            </span>
+            <div className="text-xl sm:text-2xl font-black text-amber-400 font-heading tracking-tight">
+              ₹{activePrice}
+            </div>
+          </div>
+
+          {/* Add or Stepper */}
+          {currentQuantity === 0 ? (
+            <button
+              type="button"
+              onClick={handleAdd}
+              className="btn-primary text-xs sm:text-sm py-2 px-4 rounded-xl flex items-center gap-1.5 shadow-md hover:scale-[1.03] active:scale-95 transition"
+            >
+              <Plus className="w-4 h-4 text-zinc-950 stroke-[3]" />
+              <span>ADD</span>
+            </button>
+          ) : (
+            <div className="qty-stepper">
+              <button
+                type="button"
+                onClick={() => onUpdateQuantity(item.id, selectedPortion, currentQuantity - 1)}
+                className="qty-btn"
+                aria-label="Decrease quantity"
+              >
+                <Minus className="w-3.5 h-3.5 stroke-[3]" />
+              </button>
+              <span className="qty-val">{currentQuantity}</span>
+              <button
+                type="button"
+                onClick={() => onUpdateQuantity(item.id, selectedPortion, currentQuantity + 1)}
+                className="qty-btn"
+                aria-label="Increase quantity"
+              >
+                <Plus className="w-3.5 h-3.5 stroke-[3]" />
+              </button>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}
