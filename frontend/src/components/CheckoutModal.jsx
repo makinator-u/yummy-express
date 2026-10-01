@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, ShoppingBag, Truck, MapPin, Phone, User, Send, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { API_BASE } from '../config/api';
 
 export default function CheckoutModal({
   isOpen,
@@ -74,7 +75,7 @@ export default function CheckoutModal({
         }))
       };
 
-      const response = await fetch('http://localhost:8000/api/orders', {
+      const response = await fetch(`${API_BASE}/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

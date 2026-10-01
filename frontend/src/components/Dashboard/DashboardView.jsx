@@ -5,6 +5,7 @@ import MenuManagerTab from './MenuManagerTab';
 import PartyInquiriesTab from './PartyInquiriesTab';
 import SettingsTab from './SettingsTab';
 import AddDishModal from './AddDishModal';
+import { API_BASE } from '../../config/api';
 import { 
   LayoutDashboard, 
   Flame, 
@@ -34,9 +35,9 @@ export default function DashboardView({
     setRefreshing(true);
     try {
       const [resStats, resOrders, resInquiries] = await Promise.all([
-        fetch('http://localhost:8000/api/dashboard/stats'),
-        fetch('http://localhost:8000/api/orders?limit=50'),
-        fetch('http://localhost:8000/api/party/inquiries')
+        fetch(`${API_BASE}/dashboard/stats`),
+        fetch(`${API_BASE}/orders?limit=50`),
+        fetch(`${API_BASE}/party/inquiries`)
       ]);
 
       if (resStats.ok) setStats(await resStats.json());
@@ -58,7 +59,7 @@ export default function DashboardView({
 
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/dashboard/orders/${orderId}/status`, {
+      const res = await fetch(`${API_BASE}/dashboard/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -73,7 +74,7 @@ export default function DashboardView({
 
   const handleUpdateMenuItem = async (itemId, updateData) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/dashboard/menu/items/${itemId}`, {
+      const res = await fetch(`${API_BASE}/dashboard/menu/items/${itemId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updateData)
@@ -88,7 +89,7 @@ export default function DashboardView({
   };
 
   const handleUpdateSettings = async (settingsData) => {
-    const res = await fetch('http://localhost:8000/api/dashboard/restaurant', {
+    const res = await fetch(`${API_BASE}/dashboard/restaurant`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settingsData)
