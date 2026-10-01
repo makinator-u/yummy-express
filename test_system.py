@@ -92,7 +92,23 @@ def test_full_system():
     print(f"✅ Order Status Updated: {status_res['status']}")
     assert status_res["status"] == "Preparing in Wok"
 
-    print("\n🎉 ALL BACKEND, SQLITE DATABASE, VALIDATION AND DASHBOARD TESTS PASSED 100%!")
+    # 8. Test Google Auth Sign In
+    auth_data = {
+        "email": "testuser@gmail.com",
+        "name": "Test Customer",
+        "picture": "https://lh3.googleusercontent.com/a/default-user"
+    }
+    auth_req = urllib.request.Request(
+        "http://127.0.0.1:8000/api/auth/google",
+        data=json.dumps(auth_data).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+    auth_res = json.loads(urllib.request.urlopen(auth_req).read().decode())
+    print(f"✅ Google Auth API Verified: User {auth_res['user']['name']} ({auth_res['user']['email']}) | Token: {auth_res['token'][:16]}...")
+    assert auth_res["user"]["email"] == "testuser@gmail.com"
+    assert auth_res["token"].startswith("ye_")
+
+    print("\n🎉 ALL BACKEND, SQLITE DATABASE, VALIDATION, AUTH AND DASHBOARD TESTS PASSED 100%!")
 
 if __name__ == "__main__":
     test_full_system()
