@@ -73,12 +73,35 @@ class CategoryOut(BaseModel):
     description: str
     items: List[MenuItemOut] = []
 
+class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    google_id: str
+    email: str
+    name: str
+    picture: str
+    role: str
+    created_at: datetime
+
+class GoogleAuthRequest(BaseModel):
+    credential: Optional[str] = None  # Google JWT credential from GIS
+    email: Optional[str] = None
+    name: Optional[str] = None
+    picture: Optional[str] = None
+    google_id: Optional[str] = None
+
+class AuthResponse(BaseModel):
+    token: str
+    user: UserOut
+
 class OrderItemCreate(BaseModel):
     menu_item_id: int
     portion: Literal["Half", "Full", "half", "full"]
     quantity: int = Field(ge=1)
 
 class OrderCreate(BaseModel):
+    user_id: Optional[int] = None
     customer_name: str = Field(min_length=1)
     customer_phone: str = Field(min_length=5)
     delivery_address: str = Field(min_length=1)
@@ -105,6 +128,7 @@ class OrderOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    user_id: Optional[int] = None
     order_number: str
     customer_name: str
     customer_phone: str

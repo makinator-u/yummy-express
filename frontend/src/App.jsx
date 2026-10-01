@@ -7,6 +7,8 @@ import CartDrawer from './components/CartDrawer';
 import CheckoutModal from './components/CheckoutModal';
 import PartyModal from './components/PartyModal';
 import OrderTrackerModal from './components/OrderTrackerModal';
+import GoogleAuthModal from './components/GoogleAuthModal';
+import UserOrdersModal from './components/UserOrdersModal';
 import Footer from './components/Footer';
 import DashboardView from './components/Dashboard/DashboardView';
 import { ArrowRight, RefreshCw, AlertTriangle } from 'lucide-react';
@@ -18,6 +20,20 @@ export default function App() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Auth state from localStorage
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ye_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [authToken, setAuthToken] = useState(() => {
+    return localStorage.getItem('ye_auth_token') || '';
+  });
 
   // View state: 'store' or 'dashboard'
   const [currentView, setCurrentView] = useState('store');
@@ -43,6 +59,37 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isPartyModalOpen, setIsPartyModalOpen] = useState(false);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isMyOrdersOpen, setIsMyOrdersOpen] = useState(false);
+  const [initialTrackNumber, setInitialTrackNumber] = useState('');
+
+  // Auth Handlers
+  const handleAuthSuccess = (authData) => {
+    setUser(authData.user);
+    setAuthToken(authData.token);
+    try {
+      localStorage.setItem('ye_user', JSON.stringify(authData.user));
+      localStorage.setItem('ye_auth_token', authData.token);
+    } catch (e) {
+      console.error('Failed to save user session', e);
+    }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setAuthToken('');
+    try {
+      localStorage.removeItem('ye_user');
+      localStorage.removeItem('ye_auth_token');
+    } catch (e) {
+      console.error('Failed to clear user session', e);
+    }
+  };
+
+  const handleTrackFromOrders = (orderNumber) => {
+    setInitialTrackNumber(orderNumber);
+    setIsTrackModalOpen(true);
+  };
 
   // Sync to local storage
   useEffect(() => {
@@ -173,8 +220,15 @@ export default function App() {
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
-        onOpenTrackModal={() => setIsTrackModalOpen(true)}
+        onOpenTrackModal={() => {
+          setInitialTrackNumber('');
+          setIsTrackModalOpen(true);
+        }}
         onOpenDashboard={() => setCurrentView('dashboard')}
+        user={user}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        onLogout={handleLogout}
+        onOpenMyOrders={() => setIsMyOrdersOpen(true)}
       />
 
       {/* Main Content */}
@@ -325,6 +379,11 @@ export default function App() {
         onClose={() => setIsCheckoutOpen(false)}
         cartItems={cartItems}
         onOrderPlaced={() => setCartItems([])}
+        user={user}
+        onOpenAuthModal={() => {
+          setIsCheckoutOpen(false);
+          setIsAuthModalOpen(true);
+        }}
       />
 
       <PartyModal
@@ -334,13 +393,34 @@ export default function App() {
 
       <OrderTrackerModal
         isOpen={isTrackModalOpen}
-        onClose={() => setIsTrackModalOpen(false)}
+        onClose={() => {
+          setIsTrackModalOpen(false);
+          setInitialTrackNumber('');
+        }}
+        initialOrderNumber={initialTrackNumber}
+      />
+
+      <GoogleAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
+      />
+
+      <UserOrdersModal
+        isOpen={isMyOrdersOpen}
+        onClose={() => setIsMyOrdersOpen(false)}
+        token={authToken}
+        user={user}
+        onTrackOrder={handleTrackFromOrders}
       />
 
       <Footer
         restaurant={restaurant}
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
-        onOpenTrackModal={() => setIsTrackModalOpen(true)}
+        onOpenTrackModal={() => {
+          setInitialTrackNumber('');
+          setIsTrackModalOpen(true);
+        }}
       />
     </div>
   );

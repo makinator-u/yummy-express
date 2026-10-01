@@ -65,6 +65,7 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
 
     try:
         new_order = Order(
+            user_id=order_data.user_id,
             order_number=generate_order_number(db),
             customer_name=order_data.customer_name.strip(),
             customer_phone=order_data.customer_phone.strip(),

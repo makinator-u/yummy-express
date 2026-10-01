@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { X, Search, Clock, CheckCircle2, Flame, Bike, Utensils, AlertCircle, Phone } from 'lucide-react';
 
-export default function OrderTrackerModal({ isOpen, onClose }) {
-  const [orderNumber, setOrderNumber] = useState('');
+export default function OrderTrackerModal({ isOpen, onClose, initialOrderNumber = '' }) {
+  const [orderNumber, setOrderNumber] = useState(initialOrderNumber || '');
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState(null);
   const [error, setError] = useState('');
 
+  React.useEffect(() => {
+    if (isOpen && initialOrderNumber) {
+      setOrderNumber(initialOrderNumber);
+      fetchOrder(initialOrderNumber);
+    }
+  }, [isOpen, initialOrderNumber]);
+
   if (!isOpen) return null;
 
-  const handleTrack = async (e) => {
-    e.preventDefault();
-    if (!orderNumber.trim()) return;
-
+  const fetchOrder = async (num) => {
     setLoading(true);
     setError('');
     setOrder(null);
-
     try {
-      const res = await fetch(`http://localhost:8000/api/orders/${orderNumber.trim()}`);
+      const res = await fetch(`http://localhost:8000/api/orders/${num.trim()}`);
       if (!res.ok) {
         throw new Error('Order number not found. Please check and try again.');
       }
@@ -29,6 +32,12 @@ export default function OrderTrackerModal({ isOpen, onClose }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTrack = async (e) => {
+    e.preventDefault();
+    if (!orderNumber.trim()) return;
+    fetchOrder(orderNumber);
   };
 
   const steps = [

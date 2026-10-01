@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 DB_PATH = os.environ.get("DB_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "yummy_express.db"))
@@ -12,6 +12,20 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class Base(DeclarativeBase):
     pass
+
+def init_db():
+    Base.metadata.create_all(bind=engine)
+    # Check and perform lightweight SQLite column migrations
+    with engine.connect() as conn:
+        try:
+            # Check if user_id column exists on orders table
+            result = conn.execute(text("PRAGMA table_info(orders);")).fetchall()
+            columns = [col[1] for col in result]
+            if "user_id" not in columns and len(columns) > 0:
+                conn.execute(text("ALTER TABLE orders ADD COLUMN user_id INTEGER;"))
+                conn.commit()
+        except Exception as e:
+            print("Auto migration note:", e)
 
 def get_db():
     db = SessionLocal()
