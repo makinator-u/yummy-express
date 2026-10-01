@@ -80,5 +80,9 @@ Open `http://127.0.0.1:5173` or `http://127.0.0.1:5174` in your browser.
 ## 🧪 Automated Testing
 Run the complete integration test suite:
 ```bash
-./backend/venv/bin/python3 test_system.py
+./backend/venv/bin/python3 tests/test_direct.py
+```
+Or run the HTTP live server test suite:
+```bash
+./backend/venv/bin/python3 tests/test_system.py
 ```
